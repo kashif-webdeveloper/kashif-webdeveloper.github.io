@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kashif's Pro Calculator</title>
+    
+    <style>
+        /* --- RESET & CORE --- */
+        :root {
+            /* Default Dark Theme */
+            --bg-dark: #0f172a;
+            --calc-body: #1e293b;
+            --screen: #334155;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent: #06b6d4; /* Cyan */
+            --btn-bg: #475569;
+            --btn-active: #64748b;
+            --operator: #0ea5e9;
+            --equals: #3b82f6;
+            --danger: #ef4444;
+            --sidebar-bg: #1e293b;
+            --modal-bg: #1e293b;
+            --shadow: rgba(0,0,0,0.5);
+        }
+
+        /* Light Theme Overrides */
+        body.light-mode {
+            --bg-dark: #f1f5f9;
+            --calc-body: #ffffff;
+            --screen: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --accent: #0891b2;
+            --btn-bg: #cbd5e1;
+            --btn-active: #94a3b8;
+            --operator: #0284c7;
+            --equals: #2563eb;
+            --danger: #dc2626;
+            --sidebar-bg: #ffffff;
+            --modal-bg: #ffffff;
+            --shadow: rgba(0,0,0,0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            touch-action: manipulation; 
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text);
+            height: 100vh;
+            height: 100dvh; 
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- HEADER --- */
+        header {
+            height: 60px;
+            background: var(--calc-body);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid var(--screen);
+            z-index: 2000;
+            box-shadow: 0 2px 10px var(--shadow);
+            transition: background 0.3s;
+        }
+
+        .hamburger { font-size: 24px; cursor: pointer; color: var(--accent); padding: 10px; }
+        .brand { font-size: 18px; font-weight: bold; letter-spacing: 1px; color: var(--text); }
+        .brand span { color: var(--accent); }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            position: relative;
+            z-index: 10;
+            overflow-y: auto;
+        }
+
+        .calc-body {
+            width: 100%;
+            max-width: 400px;
+            background: var(--calc-body);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 25px var(--shadow);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 20; 
+            transition: background 0.3s;
+        }
+
+        /* --- FOOTER CREDIT --- */
+        .footer-credit {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            padding-bottom: 10px;
+            width: 100%;
+        }
+        .footer-credit span { color: var(--accent); font-weight: 700; }
+
+        /* --- TABS --- */
+        .tabs {
+            display: flex;
+            background: var(--bg-dark);
+            border-radius: 10px;
+            padding: 4px;
+            margin-bottom: 15px;
+            transition: background 0.3s;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            font-size: 14px;
+            border-radius: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .tab.active { background: var(--accent); color: white; font-weight: bold; }
+
+        /* --- DISPLAY --- */
+        .display {
+            background: var(--screen);
+            height: 100px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            padding: 15px;
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1);
+            transition: background 0.3s;
+        }
+
+        .history { font-size: 14px; color: var(--text-muted); height: 20px; overflow: hidden; white-space: nowrap; }
+        
+        .result { 
+            font-size: 40px; 
+            font-weight: bold; 
+            color: var(--text);
+            white-space: nowrap; 
+            overflow-x: hidden; 
+            transition: font-size 0.1s ease;
+        }
+
+        /* --- KEYPADS --- */
+        .keypad { display: none; gap: 10px; }
+        .keypad.active { display: grid; }
+        #basic-keys { grid-template-columns: repeat(4, 1fr); }
+        #sci-keys { grid-template-columns: repeat(5, 1fr); }
+
+        /* --- BUTTONS --- */
+        button {
+            border: none;
+            background: var(--btn-bg);
+            color: white; /* Always white for contrast on buttons */
+            font-size: 20px;
+            padding: 15px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            user-select: none;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+            outline: none;
+            transition: transform 0.1s, box-shadow 0.1s, filter 0.2s;
+        }
+        
+        body.light-mode button { color: #1e293b; } /* Dark text on light buttons */
+        body.light-mode .btn-eq, body.light-mode .btn-ac, body.light-mode .btn-op { color: white; }
+
+        button:active {
+            transform: translateY(2px);
+            box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+            filter: brightness(1.1);
+        }
+
+        .btn-op { background: var(--screen); color: var(--accent); font-weight: bold; }
+        .btn-eq { background: var(--equals); color: white; font-weight: bold; }
+        .btn-ac { background: var(--danger); color: white; }
+        .btn-sci { background: var(--screen); font-size: 14px; color: var(--text); }
+
+        /* --- SIDEBAR & OVERLAY --- */
+        .overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.6); z-index: 4000;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s;
+            backdrop-filter: blur(2px);
+        }
+        .overlay.active { opacity: 1; pointer-events: all; }
+
+        .sidebar {
+            position: fixed; top: 0; left: -300px;
+            width: 280px; height: 100%;
+            background: var(--sidebar-bg);
+            z-index: 5000;
+            transition: transform 0.3s ease, background 0.3s;
+            box-shadow: 5px 0 20px var(--shadow);
+            padding: 20px;
+            display: flex; flex-direction: column;
+        }
+        .sidebar.open { transform: translateX(300px); }
+
+        .profile { text-align: center; border-bottom: 1px solid var(--screen); padding-bottom: 20px; margin-bottom: 20px; }
+        .avatar { width: 80px; height: 80px; background: linear-gradient(45deg, var(--accent), #3b82f6); border-radius: 50%; margin: 40px auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; color: white; }
+        
+        .menu-item { padding: 15px; color: var(--text-muted); border-radius: 8px; margin-bottom: 5px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .menu-item:hover, .menu-item:active { background: var(--screen); color: var(--accent); }
+
+        /* --- MODALS --- */
+        .modal {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9);
+            width: 85%; max-width: 320px; 
+            background: var(--modal-bg); 
+            border: 1px solid var(--screen);
+            border-radius: 16px; padding: 20px; z-index: 6000; opacity: 0; pointer-events: none;
+            transition: 0.2s, background 0.3s; box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        }
+        .modal.active { opacity: 1; pointer-events: all; transform: translate(-50%, -50%) scale(1); }
+        .modal h3 { margin-bottom: 15px; color: var(--accent); text-align: center; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
+        .input-group input { width: 100%; padding: 10px; background: var(--bg-dark); border: 1px solid var(--screen); color: var(--text); border-radius: 6px; }
+        .modal-btn { width: 100%; background: var(--accent); color: white; font-weight: bold; padding: 12px; border-radius: 6px; margin-top: 10px; }
+        .close-modal { position: absolute; top: 10px; right: 15px; color: var(--text-muted); font-size: 24px; cursor: pointer; }
+
+        /* --- SWITCHES (Settings) --- */
+        .switch-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 10px; }
+        .switch-label { color: var(--text); font-weight: 500; }
+        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--screen); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        /* Toast */
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 10px 20px; border-radius: 30px; font-size: 14px; opacity: 0; transition: 0.3s; z-index: 7000; pointer-events: none; }
+        .toast.show { opacity: 1; bottom: 50px; }
+
+    </style>
+</head>
+<body>
+
+    <div class="overlay" id="overlay" onclick="closeAll()"></div>
+
+    <div class="toast" id="toast">Action Successful</div>
+
+    <div class="sidebar" id="sidebar">
+        <div style="position:absolute; top:15px; right:15px; font-size:24px; padding:10px; color:var(--text-muted); cursor:pointer;" onclick="closeAll()">&times;</div>
+        <div class="profile">
+            <div class="avatar">K</div>
+            <h2 style="color:var(--text);">Kashif</h2>
+            <p style="color: var(--accent); font-weight:bold; margin-bottom: 8px; font-size: 0.9rem;">Elite Full-Stack Architect</p>
+            <p style="color: var(--text-muted); font-size: 0.8rem;">Innovative developer creating seamless, high-performance web solutions.</p>
+        </div>
+        <div class="menu-item" onclick="handleNav('home')"><span>&#8962;</span> Home</div>
+        <div class="menu-item" onclick="handleNav('sci')"><span>&#8730;</span> Scientific Mode</div>
+        <div class="menu-item" onclick="handleNav('settings')"><span>&#9881;</span> Settings</div>
+        <div class="menu-item" onclick="handleNav('signin')" style="margin-top:auto; background:var(--accent); color:white; justify-content: center; font-weight:bold;">Sign In</div>
+    </div>
+
+    <div class="modal" id="modal-signin">
+        <span class="close-modal" onclick="closeAll()">&times;</span>
+        <h3>Sign In</h3>
+        <div class="input-group"><label>Email</label><input type="email" placeholder="Enter email"></div>
+        <div class="input-group"><label>Password</label><input type="password" placeholder="Enter password"></div>
+        <button class="modal-btn" onclick="showToast('Welcome back, Kashif!'); closeAll()">Login</button>
+    </div>
+
+    <div class="modal" id="modal-settings">
+        <span class="close-modal" onclick="closeAll()">&times;</span>
+        <h3>Settings</h3>
+        
+        <div class="switch-container">
+            <span class="switch-label">Light Mode</span>
+            <label class="switch">
+                <input type="checkbox" id="theme-toggle" onchange="toggleTheme()">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <div class="switch-container">
+            <span class="switch-label">Button Sounds</span>
+            <label class="switch">
+                <input type="checkbox" id="sound-toggle" onchange="saveSoundPref()">
+                <span class="slider"></span>
+            </label>
+        </div>
+
+        <button class="modal-btn" onclick="showToast('Preferences Saved'); closeAll()">Done</button>
+    </div>
+
+    <header>
+        <div class="hamburger" onclick="openSidebar()">&#9776;</div>
+        <div class="brand">CALCULATOR<span>.NET</span></div>
+        <div style="width: 24px;"></div>
+    </header>
+
+    <div class="main-content">
+        <div class="calc-body">
+            <div class="tabs">
+                <div class="tab active" id="tab-basic" onclick="switchTab('basic')">Basic</div>
+                <div class="tab" id="tab-sci" onclick="switchTab('sci')">Scientific</div>
+            </div>
+
+            <div class="display">
+                <div class="history" id="history"></div>
+                <div class="result" id="result">0</div>
+            </div>
+
+            <div class="keypad active" id="basic-keys">
+                <button class="btn-ac" onclick="clearCalc()">AC</button>
+                <button class="btn-op" onclick="del()">DEL</button>
+                <button class="btn-op" onclick="append('%')">%</button>
+                <button class="btn-op" onclick="append('/')">&divide;</button>
+
+                <button onclick="append('7')">7</button>
+                <button onclick="append('8')">8</button>
+                <button onclick="append('9')">9</button>
+                <button class="btn-op" onclick="append('*')">&times;</button>
+
+                <button onclick="append('4')">4</button>
+                <button onclick="append('5')">5</button>
+                <button onclick="append('6')">6</button>
+                <button class="btn-op" onclick="append('-')">&minus;</button>
+
+                <button onclick="append('1')">1</button>
+                <button onclick="append('2')">2</button>
+                <button onclick="append('3')">3</button>
+                <button class="btn-op" onclick="append('+')">+</button>
+
+                <button onclick="append('0')">0</button>
+                <button onclick="append('.')">.</button>
+                <button onclick="append('00')">00</button>
+                <button class="btn-eq" onclick="calculate()">=</button>
+            </div>
+
+            <div class="keypad" id="sci-keys">
+                <button class="btn-sci" onclick="append('(')">(</button>
+                <button class="btn-sci" onclick="append(')')">)</button>
+                <button class="btn-sci" onclick="append('**2')">x&sup2;</button>
+                <button class="btn-ac" onclick="clearCalc()">AC</button>
+                <button class="btn-op" onclick="del()">DEL</button>
+
+                <button class="btn-sci" onclick="append('Math.sin(')">sin</button>
+                <button class="btn-sci" onclick="append('Math.cos(')">cos</button>
+                <button class="btn-sci" onclick="append('Math.tan(')">tan</button>
+                <button class="btn-sci" onclick="append('Math.PI')">&pi;</button>
+                <button class="btn-op" onclick="append('/')">&divide;</button>
+                
+                <button onclick="append('7')">7</button>
+                <button onclick="append('8')">8</button>
+                <button onclick="append('9')">9</button>
+                <button class="btn-sci" onclick="append('Math.sqrt(')">&radic;</button>
+                <button class="btn-op" onclick="append('*')">&times;</button>
+
+                <button onclick="append('4')">4</button>
+                <button onclick="append('5')">5</button>
+                <button onclick="append('6')">6</button>
+                <button class="btn-sci" onclick="append('Math.log(')">ln</button>
+                <button class="btn-op" onclick="append('-')">&minus;</button>
+
+                <button onclick="append('1')">1</button>
+                <button onclick="append('2')">2</button>
+                <button onclick="append('3')">3</button>
+                <button class="btn-sci" onclick="append('**')">^</button>
+                <button class="btn-op" onclick="append('+')">+</button>
+
+                <button onclick="append('0')">0</button>
+                <button onclick="append('.')">.</button>
+                <button class="btn-sci" onclick="append('Math.E')">e</button>
+                <button class="btn-sci" onclick="append('Math.exp(')">exp</button>
+                <button class="btn-eq" onclick="calculate()">=</button>
+            </div>
+        </div>
+
+        <div class="footer-credit">
+            Architected & Engineered by <span>Kashif Dawar</span>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. CONFIG & STATE MANAGEMENT ---
+        let expression = "";
+        let audioCtx = null; // Audio Context for Sound
+
+        const resultEl = document.getElementById('result');
+        const historyEl = document.getElementById('history');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const themeToggle = document.getElementById('theme-toggle');
+        const soundToggle = document.getElementById('sound-toggle');
+
+        // --- 2. INITIALIZATION (Load Preferences) ---
+        window.onload = function() {
+            // Load Theme
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.add('light-mode');
+                themeToggle.checked = true;
+            }
+            // Load Sound Pref
+            if (localStorage.getItem('sound') === 'on') {
+                soundToggle.checked = true;
+            }
+            // Load Last Result
+            const lastRes = localStorage.getItem('lastResult');
+            if(lastRes && lastRes !== "0" && lastRes !== "Error") {
+                resultEl.innerText = lastRes;
+                expression = lastRes; // Allow continuation
+                historyEl.innerText = "Restored Session";
+            }
+        };
+
+        // --- 3. SETTINGS LOGIC ---
+        function toggleTheme() {
+            if (themeToggle.checked) {
+                document.body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        function saveSoundPref() {
+            localStorage.setItem('sound', soundToggle.checked ? 'on' : 'off');
+        }
+
+        // --- 4. AUDIO ENGINE (No External Files) ---
+        function playSound() {
+            if (!soundToggle.checked) return;
+
+            // Init context on first user interaction
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, audioCtx.currentTime); // Frequency
+            osc.frequency.exponentialRampToValueAtTime(300, audioCtx.currentTime + 0.1);
+            
+            gainNode.gain.setValueAtTime(0.05, audioCtx.currentTime); // Volume
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.1);
+        }
+
+        // --- 5. CALCULATOR LOGIC ---
+        function updateDisplay() {
+            let displayExpr = expression
+                .replace(/Math.sin\(/g, 'sin(')
+                .replace(/Math.cos\(/g, 'cos(')
+                .replace(/Math.tan\(/g, 'tan(')
+                .replace(/Math.sqrt\(/g, '√(')
+                .replace(/Math.log\(/g, 'ln(')
+                .replace(/Math.exp\(/g, 'exp(')
+                .replace(/Math.PI/g, 'π')
+                .replace(/Math.E/g, 'e')
+                .replace(/\*/g, '×')
+                .replace(/\//g, '÷');
+            
+            resultEl.innerText = displayExpr || "0";
+
+            // Font Scaling
+            const len = resultEl.innerText.length;
+            if (len > 15) resultEl.style.fontSize = "22px";
+            else if (len > 10) resultEl.style.fontSize = "30px";
+            else resultEl.style.fontSize = "40px";
+        }
+
+        function append(val) {
+            playSound(); // Haptic sound
+            
+            const lastChar = expression.slice(-1);
+            const operators = ['+', '-', '*', '/', '%'];
+
+            if (expression === "" && operators.includes(val) && val !== '-') return;
+            
+            if (operators.includes(val) && operators.includes(lastChar)) {
+                expression = expression.slice(0, -1) + val;
+            } else if (val === '.') {
+                const parts = expression.split(/[\+\-\*\/]/); 
+                const currentNum = parts[parts.length - 1];
+                if (!currentNum.includes('.')) expression += val;
+            } else {
+                expression += val;
+            }
+            updateDisplay();
+        }
+
+        function clearCalc() {
+            playSound();
+            expression = "";
+            historyEl.innerText = "";
+            localStorage.removeItem('lastResult'); // Clear memory
+            updateDisplay();
+        }
+
+        function del() {
+            playSound();
+            if (expression.length > 0) {
+                expression = expression.slice(0, -1);
+                updateDisplay();
+            }
+        }
+
+        function calculate() {
+            playSound();
+            try {
+                if(expression === "") return;
+
+                // SECURITY: Basic sanitization to prevent injection
+                // Only allow numbers, math operators, and Math function keywords
+                const safeChars = /^[0-9+\-*/%.()\sMath.sincosqrtloexpPIE]+$/;
+                if (!safeChars.test(expression)) {
+                    throw new Error("Invalid Input");
+                }
+                
+                let displayExpr = resultEl.innerText;
+                historyEl.innerText = displayExpr + " =";
+                
+                let res = eval(expression);
+                
+                if (!isFinite(res) || isNaN(res)) {
+                    resultEl.innerText = "Error";
+                    expression = "";
+                } else {
+                    res = parseFloat(res.toFixed(8));
+                    expression = res.toString();
+                    resultEl.innerText = expression;
+                    
+                    // Save Result for next visit
+                    localStorage.setItem('lastResult', expression);
+                    
+                    updateDisplay();
+                }
+            } catch (err) {
+                resultEl.innerText = "Error";
+                expression = "";
+            }
+        }
+
+        // --- 6. EVENT LISTENERS ---
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            if ((key >= '0' && key <= '9') || key === '.') append(key);
+            else if (key === '+') append('+');
+            else if (key === '-') append('-');
+            else if (key === '*') append('*');
+            else if (key === '/') { event.preventDefault(); append('/'); }
+            else if (key === '%') append('%');
+            else if (key === 'Enter' || key === '=') calculate();
+            else if (key === 'Backspace') del();
+            else if (key === 'Escape') clearCalc();
+        });
+
+        // --- 7. UI NAVIGATION ---
+        function openSidebar() {
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+        }
+
+        function closeAll() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            document.getElementById('modal-signin').classList.remove('active');
+            document.getElementById('modal-settings').classList.remove('active');
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function handleNav(action) {
+            sidebar.classList.remove('open');
+            
+            if (action === 'home') {
+                switchTab('basic');
+                clearCalc();
+                overlay.classList.remove('active');
+                showToast('Welcome Home');
+            } 
+            else if (action === 'sci') {
+                switchTab('sci');
+                overlay.classList.remove('active');
+                showToast('Scientific Mode Activated');
+            }
+            else if (action === 'settings') {
+                setTimeout(() => {
+                     document.getElementById('modal-settings').classList.add('active');
+                     overlay.classList.add('active');
+                }, 300);
+            }
+            else if (action === 'signin') {
+                setTimeout(() => {
+                    document.getElementById('modal-signin').classList.add('active');
+                    overlay.classList.add('active');
+                }, 300);
+            }
+        }
+
+        function switchTab(mode) {
+            const basicKeys = document.getElementById('basic-keys');
+            const sciKeys = document.getElementById('sci-keys');
+            const tabBasic = document.getElementById('tab-basic');
+            const tabSci = document.getElementById('tab-sci');
+
+            if (mode === 'basic') {
+                basicKeys.classList.add('active');
+                sciKeys.classList.remove('active');
+                tabBasic.classList.add('active');
+                tabSci.classList.remove('active');
+            } else {
+                basicKeys.classList.remove('active');
+                sciKeys.classList.add('active');
+                tabBasic.classList.remove('active');
+                tabSci.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
