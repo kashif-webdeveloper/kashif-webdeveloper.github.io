@@ -8,11 +8,11 @@
       gtag('js', new Date());
       gtag('config', 'G-JW1FFF45BH');
     </script>
-    
     <meta name="google-adsense-account" content="ca-pub-5524773081921512">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Kashif's Pro Calculator - A high-performance scientific calculator for web.">
+    <meta name="description" content="Kashif's Pro Calculator - A high-performance scientific calculator for web. Free online tool for students and engineers.">
     <title>Kashif's Pro Calculator</title>
     
     <style>
@@ -32,7 +32,7 @@
             --sidebar-bg: #1e293b;
             --modal-bg: #1e293b;
             --shadow: rgba(0,0,0,0.5);
-            --card-bg: #334155; /* New for Contact Cards */
+            --card-bg: #334155;
         }
 
         body.light-mode {
@@ -135,7 +135,7 @@
 
         .profile { text-align: center; border-bottom: 1px solid var(--screen); padding-bottom: 20px; margin-bottom: 20px; }
         .avatar { width: 80px; height: 80px; background: linear-gradient(45deg, var(--accent), #3b82f6); border-radius: 50%; margin: 40px auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; color: white; }
-        .menu-item { padding: 15px; color: var(--text-muted); border-radius: 8px; margin-bottom: 5px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .menu-item { padding: 15px; color: var(--text-muted); border-radius: 8px; margin-bottom: 5px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
         .menu-item:hover, .menu-item:active { background: var(--screen); color: var(--accent); }
 
         /* --- MODALS --- */
@@ -147,17 +147,6 @@
         .input-group input { width: 100%; padding: 10px; background: var(--bg-dark); border: 1px solid var(--screen); color: var(--text); border-radius: 6px; }
         .modal-btn { width: 100%; background: var(--accent); color: white; font-weight: bold; padding: 12px; border-radius: 6px; margin-top: 10px; display: block; text-align: center; text-decoration: none; border: none; cursor: pointer; }
         .close-modal { position: absolute; top: 10px; right: 15px; color: var(--text-muted); font-size: 24px; cursor: pointer; }
-
-        /* --- CONTACT CARDS (New) --- */
-        .dev-card { background: var(--card-bg); border-radius: 12px; padding: 15px; margin-bottom: 15px; border: 1px solid var(--screen); text-align: center; }
-        .contact-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 10px; border-radius: 8px; color: white; font-weight: bold; margin-top: 8px; text-decoration: none; font-size: 0.9rem; }
-        .btn-wa { background: #25D366; }
-        .btn-email { background: #EA4335; }
-        .social-row { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
-        .social-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none; font-weight: bold; }
-        .ico-fb { background: #1877F2; }
-        .ico-tw { background: #000000; border: 1px solid #333; }
-        .ico-tk { background: #FE2C55; }
 
         /* --- SWITCHES --- */
         .switch-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 10px; }
@@ -189,7 +178,9 @@
         <div class="menu-item" onclick="handleNav('home')"><span>&#8962;</span> Home</div>
         <div class="menu-item" onclick="handleNav('sci')"><span>&#8730;</span> Scientific Mode</div>
         <div class="menu-item" onclick="handleNav('settings')"><span>&#9881;</span> Settings</div>
-        <div class="menu-item" onclick="handleNav('contact')"><span>&#128100;</span> Contact Developer</div>
+        
+        <a href="contact.html" class="menu-item" style="text-decoration:none;"><span>&#128100;</span> Contact Developer</a>
+        
         <div class="menu-item" onclick="handleNav('signin')" style="margin-top:auto; background:var(--accent); color:white; justify-content: center; font-weight:bold;">Sign In</div>
     </div>
 
@@ -213,33 +204,6 @@
             <label class="switch"><input type="checkbox" id="sound-toggle" onchange="saveSoundPref()"><span class="slider"></span></label>
         </div>
         <button class="modal-btn" onclick="showToast('Preferences Saved'); closeAll()">Done</button>
-    </div>
-
-    <div class="modal" id="modal-contact">
-        <span class="close-modal" onclick="closeAll()">&times;</span>
-        <h3>Developer Info</h3>
-        
-        <div class="dev-card">
-            <div class="avatar" style="width:60px; height:60px; font-size:24px; margin:0 auto 10px;">K</div>
-            <h4 style="color:var(--text);">Kashif</h4>
-            <p style="color:var(--accent); font-weight:bold; margin-bottom:5px;">Elite Web Developer</p>
-            <a href="https://kashif-webdeveloper.github.io/Kashifdevskills/" target="_blank" class="modal-btn">Visit Official Portfolio</a>
-        </div>
-
-        <div class="dev-card">
-            <h4 style="color:var(--text); margin-bottom:10px;">Get in Touch</h4>
-            <a href="mailto:kashifdawarkashi508@gmail.com" target="_blank" class="contact-btn btn-email">Email Me</a>
-            <a href="https://wa.me/qr/6XYQWS4TYRXKJ1" target="_blank" class="contact-btn btn-wa">WhatsApp</a>
-        </div>
-
-        <div class="dev-card">
-            <h4 style="color:var(--text); margin-bottom:10px;">Follow Me</h4>
-            <div class="social-row">
-                <a href="https://www.facebook.com/share/17yA4ZJFmS/" target="_blank" class="social-icon ico-fb">F</a>
-                <a href="https://x.com/Kashifdawa45874?t=n0-_eaiL3KCiV6rYXhBtrA&s=09" target="_blank" class="social-icon ico-tw">X</a>
-                <a href="https://www.tiktok.com/@kashifdawarkashi?_r=1&_t=ZS-91qpBhmKOEE" target="_blank" class="social-icon ico-tk">T</a>
-            </div>
-        </div>
     </div>
 
     <header>
@@ -301,7 +265,7 @@
         </div>
 
         <div class="footer-credit">
-            Architected & Engineered by <span>Kashif Dawar</span> | <a href="privacy.html" target="_blank">Privacy Policy</a>
+            Architected & Engineered by <span>Kashif Dawar</span> | <a href="contact.html">Contact Us</a> | <a href="privacy.html" target="_blank">Privacy Policy</a>
         </div>
     </div>
 
@@ -389,7 +353,7 @@
             overlay.classList.remove('active');
             document.getElementById('modal-signin').classList.remove('active');
             document.getElementById('modal-settings').classList.remove('active');
-            document.getElementById('modal-contact').classList.remove('active');
+            // Contact modal removed as it is now a page
         }
 
         function showToast(msg) {
@@ -398,7 +362,6 @@
         }
 
         function handleNav(action) {
-            // FIX: Close everything first to prevent overlay getting stuck
             closeAll();
 
             if (action === 'home') {
@@ -416,9 +379,7 @@
             else if (action === 'signin') {
                 setTimeout(() => { document.getElementById('modal-signin').classList.add('active'); overlay.classList.add('active'); }, 300);
             }
-            else if (action === 'contact') {
-                setTimeout(() => { document.getElementById('modal-contact').classList.add('active'); overlay.classList.add('active'); }, 300);
-            }
+            // Contact action removed, handled by simple HTML link
         }
 
         function switchTab(mode) {

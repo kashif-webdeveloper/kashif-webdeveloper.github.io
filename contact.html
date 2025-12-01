@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Contact the developer of Kashif's Pro Calculator. Support, feedback, and business inquiries.">
+    <title>Contact Us - Kashif's Pro Calculator</title>
+    
+    <style>
+        /* --- RESET & VARIABLES (MATCHING YOUR CALCULATOR) --- */
+        :root {
+            --bg-dark: #0f172a;
+            --calc-body: #1e293b;
+            --screen: #334155;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent: #06b6d4;
+            --card-bg: #1e293b;
+            --btn-bg: #475569;
+            --shadow: rgba(0,0,0,0.5);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text);
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            margin: 0; padding: 0;
+            line-height: 1.6;
+        }
+
+        /* --- HEADER --- */
+        header {
+            height: 60px; background: var(--calc-body); display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; border-bottom: 1px solid var(--screen); box-shadow: 0 2px 10px var(--shadow);
+        }
+        .brand { font-size: 18px; font-weight: bold; letter-spacing: 1px; color: var(--text); text-decoration: none; }
+        .brand span { color: var(--accent); }
+        .back-btn { text-decoration: none; color: var(--text-muted); font-size: 14px; display: flex; align-items: center; gap: 5px; transition: 0.3s; }
+        .back-btn:hover { color: var(--accent); }
+
+        /* --- MAIN CONTAINER --- */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center; margin-bottom: 40px;
+        }
+        .page-title h1 { font-size: 2.5rem; margin-bottom: 10px; color: var(--text); }
+        .page-title p { color: var(--text-muted); font-size: 1.1rem; }
+
+        /* --- CONTACT GRID --- */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        /* --- CARDS --- */
+        .info-card {
+            background: var(--calc-body);
+            border: 1px solid var(--screen);
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.15); /* Accent glow */
+            border-color: var(--accent);
+        }
+
+        .icon-box {
+            width: 60px; height: 60px;
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 20px;
+        }
+
+        .info-card h3 { margin-bottom: 10px; font-size: 1.2rem; }
+        .info-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; }
+        
+        .action-btn {
+            display: inline-block;
+            padding: 10px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.2s;
+            width: 80%;
+        }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { filter: brightness(1.1); }
+        .btn-secondary { background: var(--screen); color: var(--text); }
+        .btn-secondary:hover { background: var(--text-muted); color: var(--bg-dark); }
+
+        /* --- FORM SECTION --- */
+        .form-section {
+            background: var(--calc-body);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--screen);
+        }
+        .form-section h2 { color: var(--accent); margin-bottom: 20px; font-size: 1.5rem; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; color: var(--text-muted); margin-bottom: 8px; font-size: 0.9rem; }
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            background: var(--bg-dark);
+            border: 1px solid var(--screen);
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .form-control:focus { border-color: var(--accent); }
+        textarea.form-control { resize: vertical; min-height: 120px; }
+
+        .submit-btn {
+            background: var(--accent); color: white;
+            border: none; padding: 15px 30px;
+            border-radius: 8px; font-size: 1rem; font-weight: bold;
+            cursor: pointer; width: 100%; transition: 0.3s;
+        }
+        .submit-btn:hover { opacity: 0.9; transform: scale(1.02); }
+
+        /* --- FOOTER --- */
+        footer {
+            text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 0.9rem;
+            border-top: 1px solid var(--screen); margin-top: 50px;
+        }
+        footer a { color: var(--accent); text-decoration: none; }
+
+        @media (max-width: 600px) {
+            .page-title h1 { font-size: 2rem; }
+            .form-section { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="brand">CALCULATOR<span>.NET</span></a>
+        <a href="index.html" class="back-btn">&#8592; Back to Calculator</a>
+    </header>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>Get in Touch</h1>
+            <p>We are here to help. Reach out for support, feedback, or collaboration.</p>
+        </div>
+
+        <div class="contact-grid">
+            
+            <div class="info-card">
+                <div class="icon-box">&#9993;</div> <h3>General Support</h3>
+                <p>For bug reports, feature requests, or general questions about the calculator.</p>
+                <a href="mailto:kashifdawarkashi508@gmail.com" class="action-btn btn-primary">Email Support</a>
+            </div>
+
+            <div class="info-card">
+                <div class="icon-box">&#128187;</div> <h3>Hire the Developer</h3>
+                <p>Looking for a full-stack architect? View my portfolio or discuss a project.</p>
+                <a href="https://kashif-webdeveloper.github.io/Kashifdevskills/" target="_blank" class="action-btn btn-secondary">View Portfolio</a>
+            </div>
+
+            <div class="info-card">
+                <div class="icon-box">&#128222;</div> <h3>Quick Connect</h3>
+                <p>Follow updates or send a quick message via WhatsApp or Social Media.</p>
+                <a href="https://wa.me/qr/6XYQWS4TYRXKJ1" target="_blank" class="action-btn btn-secondary" style="background:#25D366; color:white;">WhatsApp Me</a>
+            </div>
+        </div>
+
+        <div class="form-section">
+            <h2>Send a Direct Message</h2>
+            <form action="mailto:kashifdawarkashi508@gmail.com" method="post" enctype="text/plain">
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" name="name" class="form-control" placeholder="John Doe" required>
+                </div>
+                <div class="form-group">
+                    <label>Subject</label>
+                    <select name="subject" class="form-control">
+                        <option>Bug Report</option>
+                        <option>Feature Request</option>
+                        <option>Business Inquiry</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Message</label>
+                    <textarea name="message" class="form-control" placeholder="How can we help you?" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+            <p style="margin-top:15px; font-size:0.85rem; color:var(--text-muted); text-align:center;">
+                Note: This form will open your default email client to send the message safely.
+            </p>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px; color: var(--text-muted);">
+            <p><strong>Response Time:</strong> We usually reply to inquiries within 24-48 hours.</p>
+            <p><strong>Business Location:</strong> Islamabad, Pakistan</p>
+        </div>
+
+    </div>
+
+    <footer>
+        &copy; 2025 Kashif's Pro Calculator. All rights reserved. <br>
+        <a href="index.html">Home</a> | <a href="privacy.html">Privacy Policy</a>
+    </footer>
+
+</body>
+</html>
