@@ -13,8 +13,12 @@
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Kashif's Pro Calculator - A high-performance scientific calculator for web. Free online tool for students, engineers, and developers.">
-    <title>Kashif's Pro Calculator - Free Online Scientific Tool</title>
+    <meta name="description" content="Kashif's Pro Calculator - A high-performance scientific calculator for web. Free online tool for students and engineers.">
+    
+    <title>Kashif's Pro Calculator</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e293b">
+    <link rel="apple-touch-icon" href="Kashi calculator.png">
     
     <style>
         /* --- RESET & CORE --- */
@@ -83,38 +87,39 @@
         .calc-body {
             width: 100%; max-width: 400px; background: var(--calc-body); border-radius: 20px; padding: 20px;
             box-shadow: 0 10px 25px var(--shadow); display: flex; flex-direction: column; position: relative;
-            z-index: 20; transition: background 0.3s; margin-bottom: 10px; flex-shrink: 0;
+            z-index: 20; transition: background 0.3s; margin-bottom: 20px; flex-shrink: 0;
         }
 
-        /* --- BOUNCING ARROW STYLES (NEW) --- */
+        /* --- SCROLL INDICATOR --- */
         .scroll-indicator {
-            text-align: center; margin-bottom: 20px; cursor: pointer;
-            animation: bounce 2s infinite; display: flex; flex-direction: column; align-items: center;
-        }
-        .scroll-indicator span {
-            font-size: 0.8rem; color: var(--accent); font-weight: bold; text-transform: uppercase; letter-spacing: 1px;
-        }
-        .scroll-indicator .arrow {
-            font-size: 1.5rem; color: var(--text-muted); margin-top: -5px;
+            color: var(--accent);
+            text-align: center;
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 30px;
+            cursor: pointer;
+            animation: bounce 2s infinite;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-10px);}
-            60% {transform: translateY(-5px);}
+            40% {transform: translateY(-5px);}
+            60% {transform: translateY(-3px);}
         }
 
-        /* --- SEO CONTENT (Expanded for AdSense) --- */
+        /* --- SEO CONTENT (Detailed) --- */
         .seo-section {
-            width: 100%; max-width: 800px; margin-top: 10px; padding: 30px;
+            width: 100%; max-width: 800px; margin-top: 10px; padding: 25px;
             background: var(--calc-body); border-radius: 12px; border: 1px solid var(--screen);
-            color: var(--text); margin-bottom: 30px;
+            color: var(--text); margin-bottom: 20px; box-shadow: 0 4px 6px var(--shadow);
         }
-        .seo-section h2 { color: var(--accent); font-size: 1.4rem; margin-bottom: 15px; margin-top: 20px; border-bottom: 1px solid var(--screen); padding-bottom: 10px; }
-        .seo-section h2:first-child { margin-top: 0; }
-        .seo-section h3 { color: var(--text); font-size: 1.1rem; margin-bottom: 10px; margin-top: 15px; }
-        .seo-section p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 15px; }
-        .seo-section ul { padding-left: 20px; color: var(--text-muted); margin-bottom: 15px; }
-        .seo-section li { margin-bottom: 8px; font-size: 0.95rem; }
+        .seo-section h2 { color: var(--accent); font-size: 1.4rem; margin-bottom: 15px; border-bottom: 1px solid var(--screen); padding-bottom: 10px; }
+        .seo-section h3 { color: var(--text); font-size: 1.1rem; margin-top: 20px; margin-bottom: 10px; font-weight: 600; }
+        .seo-section p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 15px; }
+        .seo-section ul { list-style: none; padding: 0; margin-bottom: 15px; }
+        .seo-section li { margin-bottom: 10px; padding-left: 15px; border-left: 2px solid var(--accent); color: var(--text-muted); font-size: 0.95rem; }
+        .seo-section strong { color: var(--text); }
 
         /* --- FOOTER CREDIT --- */
         .footer-credit {
@@ -122,7 +127,7 @@
             padding: 20px 0; width: 100%;
         }
         .footer-credit span { color: var(--accent); font-weight: 700; }
-        .footer-credit a { color: var(--accent); text-decoration: none; margin: 0 5px; }
+        .footer-credit a { color: var(--accent); text-decoration: none; margin-left: 5px; }
 
         /* --- TABS & DISPLAY --- */
         .tabs { display: flex; background: var(--bg-dark); border-radius: 10px; padding: 4px; margin-bottom: 15px; transition: background 0.3s; }
@@ -279,12 +284,11 @@
             </div>
         </div>
 
-        <div class="scroll-indicator" onclick="scrollToContent()">
-            <span>Read Guide & Features</span>
-            <div class="arrow">&#8595;</div>
+        <div class="scroll-indicator" onclick="document.getElementById('guide-section').scrollIntoView({behavior: 'smooth'})">
+            READ GUIDE & FEATURES<br>&#8595;
         </div>
 
-        <div class="seo-section">
+        <div class="seo-section" id="guide-section">
             <h2>Complete Guide to Kashif's Scientific Calculator</h2>
             <p>Welcome to the ultimate web-based calculation tool developed by Kashif Dawar. This application bridges the gap between standard physical calculators and modern computing power. Whether you are a student solving algebra, an engineer checking arithmetic, or a developer testing logic, this tool is designed for precision and speed.</p>
             
@@ -297,7 +301,7 @@
 
             <h3>Why Choose This Online Calculator?</h3>
             <p>Unlike other slow, ad-heavy calculators, Kashif's Pro Calculator is built on a lightweight JavaScript engine. This ensures that calculations happen instantly on your device without server lag. Additionally, our <strong>Responsive Design</strong> ensures the interface adapts perfectly whether you are on a mobile phone, tablet, or desktop computer.</p>
-            
+
             <h3>Privacy and Data Security</h3>
             <p>We prioritize your privacy. This tool is a client-side application, meaning all math is processed locally in your browser. We do not store your equations or results on any external servers. You can use this tool with confidence knowing your data remains on your device.</p>
 
@@ -307,8 +311,7 @@
         </div>
 
         <div class="footer-credit">
-            Architected & Engineered by <span>Kashif Dawar</span> <br>
-            <a href="contact.html">Contact</a> | <a href="terms.html">Terms of Use</a> | <a href="privacy.html">Privacy Policy</a>
+            Architected & Engineered by <span>Kashif Dawar</span> | <a href="contact.html">Contact Us</a> | <a href="privacy.html" target="_blank">Privacy Policy</a>
         </div>
     </div>
 
@@ -396,18 +399,12 @@
             overlay.classList.remove('active');
             document.getElementById('modal-signin').classList.remove('active');
             document.getElementById('modal-settings').classList.remove('active');
+            // Contact modal removed as it is now a page
         }
 
         function showToast(msg) {
             const toast = document.getElementById('toast'); toast.innerText = msg; toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
-        }
-
-        // --- SCROLL LOGIC FOR ARROW (NEW) ---
-        function scrollToContent() {
-            document.querySelector('.seo-section').scrollIntoView({ 
-                behavior: 'smooth' 
-            });
         }
 
         function handleNav(action) {
@@ -435,6 +432,15 @@
             const tabBasic = document.getElementById('tab-basic'); const tabSci = document.getElementById('tab-sci');
             if (mode === 'basic') { basicKeys.classList.add('active'); sciKeys.classList.remove('active'); tabBasic.classList.add('active'); tabSci.classList.remove('active'); }
             else { basicKeys.classList.remove('active'); sciKeys.classList.add('active'); tabBasic.classList.remove('active'); tabSci.classList.remove('active'); }
+        }
+
+        // --- PWA REGISTRATION ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('App Ready', reg.scope))
+                    .catch(err => console.log('App Fail', err));
+            });
         }
     </script>
 </body>

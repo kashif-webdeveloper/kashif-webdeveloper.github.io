@@ -1,0 +1,21 @@
+{
+  "name": "Kashif's Pro Calculator",
+  "short_name": "Pro Calc",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#1e293b",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "Kashi calculator.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "scientific calculator.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
