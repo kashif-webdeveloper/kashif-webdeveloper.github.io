@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PTXNYWJ847"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-PTXNYWJ847');
+    </script>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5524773081921512"
+     crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-5524773081921512">
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Free Online Log Calculator. Solve for Base, Argument, or Result instantly. Includes Natural Log (ln), Binary Log (log2), and comprehensive Logarithm rules and guides.">
+    
+    <title>Log Calculator - Solve Logarithms & Natural Logs | Kashif's Tools</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e293b">
+    <link rel="apple-touch-icon" href="kashi calculator.png">
+    
+    <style>
+        /* --- COPY OF YOUR CORE STYLES --- */
+        :root {
+            --bg-dark: #0f172a;
+            --calc-body: #1e293b;
+            --screen: #334155;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent: #06b6d4;
+            --btn-bg: #475569;
+            --btn-active: #64748b;
+            --operator: #0ea5e9;
+            --equals: #3b82f6;
+            --danger: #ef4444;
+            --sidebar-bg: #1e293b;
+            --modal-bg: #1e293b;
+            --shadow: rgba(0,0,0,0.5);
+            --card-bg: #334155;
+            --input-border: #475569;
+        }
+
+        body.light-mode {
+            --bg-dark: #f1f5f9;
+            --calc-body: #ffffff;
+            --screen: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --accent: #0891b2;
+            --btn-bg: #cbd5e1;
+            --btn-active: #94a3b8;
+            --operator: #0284c7;
+            --equals: #2563eb;
+            --danger: #dc2626;
+            --sidebar-bg: #ffffff;
+            --modal-bg: #ffffff;
+            --shadow: rgba(0,0,0,0.15);
+            --card-bg: #f8fafc;
+            --input-border: #cbd5e1;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Roboto, sans-serif; touch-action: manipulation; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text);
+            height: 100vh; height: 100dvh; width: 100vw;
+            overflow: hidden; display: flex; flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- HEADER --- */
+        header {
+            height: 60px; background: var(--calc-body); display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; border-bottom: 1px solid var(--screen); z-index: 2000; box-shadow: 0 2px 10px var(--shadow);
+            transition: background 0.3s; flex-shrink: 0;
+        }
+        .hamburger { font-size: 24px; cursor: pointer; color: var(--accent); padding: 10px; }
+        .brand { font-size: 18px; font-weight: bold; letter-spacing: 1px; color: var(--text); }
+        .brand span { color: var(--accent); }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            padding: 20px 10px; position: relative; z-index: 10; overflow-y: auto;
+        }
+
+        /* --- LOG CALC SPECIFIC --- */
+        .calc-body {
+            width: 100%; max-width: 500px; background: var(--calc-body); border-radius: 20px; padding: 25px;
+            box-shadow: 0 10px 25px var(--shadow); display: flex; flex-direction: column; position: relative;
+            z-index: 20; transition: background 0.3s; margin-bottom: 20px; flex-shrink: 0;
+        }
+        
+        .log-input-container {
+            display: flex; flex-direction: column; gap: 15px; margin-bottom: 20px;
+        }
+
+        .log-row {
+            display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .log-field {
+            display: flex; flex-direction: column; width: 100%;
+        }
+        
+        .log-field label {
+            font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; font-weight: 600;
+        }
+
+        .log-input {
+            width: 100%; padding: 12px; font-size: 18px; border-radius: 8px;
+            border: 2px solid var(--input-border); background: var(--bg-dark); color: var(--text);
+            outline: none; transition: 0.2s;
+        }
+        
+        .log-input:focus { border-color: var(--accent); }
+
+        .equation-display {
+            text-align: center; margin: 15px 0; font-size: 1.5rem; color: var(--text-muted); font-family: 'Courier New', monospace;
+            padding: 10px; background: var(--screen); border-radius: 8px;
+        }
+
+        .action-buttons {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 10px;
+        }
+
+        /* --- SEO CONTENT --- */
+        .seo-section {
+            width: 100%; max-width: 800px; margin-top: 10px; padding: 30px;
+            background: var(--calc-body); border-radius: 12px; border: 1px solid var(--screen);
+            color: var(--text); margin-bottom: 20px; box-shadow: 0 4px 6px var(--shadow);
+        }
+        .seo-section h1 { color: var(--accent); font-size: 1.8rem; margin-bottom: 20px; border-bottom: 1px solid var(--screen); padding-bottom: 10px; }
+        .seo-section h2 { color: var(--text); font-size: 1.5rem; margin-top: 30px; margin-bottom: 15px; font-weight: 600; border-left: 4px solid var(--accent); padding-left: 10px; }
+        .seo-section h3 { color: var(--text); font-size: 1.2rem; margin-top: 25px; margin-bottom: 10px; font-weight: 600; }
+        .seo-section p { font-size: 1rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 15px; text-align: justify; }
+        .seo-section ul, .seo-section ol { list-style: none; padding: 0; margin-bottom: 15px; }
+        .seo-section li { margin-bottom: 12px; padding-left: 15px; border-left: 2px solid var(--screen); color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+        .seo-section strong { color: var(--text); font-weight: 700; }
+        .formula-box { background: var(--screen); padding: 15px; border-radius: 8px; font-family: monospace; text-align: center; margin: 20px 0; border: 1px solid var(--accent); color: var(--text); }
+
+        /* --- FOOTER CREDIT --- */
+        .footer-credit {
+            margin-top: auto; text-align: center; font-size: 0.8rem; color: var(--text-muted);
+            padding: 20px 0; width: 100%; border-top: 1px solid var(--screen);
+        }
+        .footer-credit span { color: var(--accent); font-weight: 700; }
+        .footer-credit a { color: var(--accent); text-decoration: none; margin: 0 5px; cursor: pointer; }
+
+        /* --- SIDEBAR & OVERLAY --- */
+        .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 4000; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(2px); }
+        .overlay.active { opacity: 1; pointer-events: all; }
+
+        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--sidebar-bg); z-index: 5000; transition: transform 0.3s ease, background 0.3s; box-shadow: 5px 0 20px var(--shadow); padding: 20px; display: flex; flex-direction: column; overflow-y: auto; }
+        .sidebar.open { transform: translateX(300px); }
+
+        .profile { text-align: center; border-bottom: 1px solid var(--screen); padding-bottom: 20px; margin-bottom: 20px; }
+        .avatar { width: 80px; height: 80px; background: linear-gradient(45deg, var(--accent), #3b82f6); border-radius: 50%; margin: 40px auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; color: white; }
+        .menu-item { padding: 15px; color: var(--text-muted); border-radius: 8px; margin-bottom: 5px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; position: relative; z-index: 5001; text-decoration: none; font-size: 16px; }
+        .menu-item:hover, .menu-item:active { background: var(--screen); color: var(--accent); }
+
+        /* --- COMMON UI ELEMENTS --- */
+        .btn-calc { background: var(--accent); color: white; border: none; padding: 15px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        .btn-calc:hover { filter: brightness(1.1); }
+        .btn-clear { background: var(--danger); color: white; border: none; padding: 15px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+        
+        /* Modal & Toast (Copied) */
+        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); width: 85%; max-width: 320px; background: var(--modal-bg); border: 1px solid var(--screen); border-radius: 16px; padding: 20px; z-index: 6000; opacity: 0; pointer-events: none; transition: 0.2s, background 0.3s; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
+        .modal.active { opacity: 1; pointer-events: all; transform: translate(-50%, -50%) scale(1); }
+        .modal h3 { margin-bottom: 15px; color: var(--accent); text-align: center; }
+        .switch-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .switch-label { color: var(--text); font-weight: 500; }
+        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--screen); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent); }
+        input:checked + .slider:before { transform: translateX(24px); }
+        .modal-btn { width: 100%; background: var(--accent); color: white; font-weight: bold; padding: 12px; border-radius: 6px; border: none; cursor: pointer; }
+        .close-modal { position: absolute; top: 10px; right: 15px; color: var(--text-muted); font-size: 24px; cursor: pointer; }
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 10px 20px; border-radius: 30px; font-size: 14px; opacity: 0; transition: 0.3s; z-index: 7000; pointer-events: none; }
+        .toast.show { opacity: 1; bottom: 50px; }
+    </style>
+</head>
+<body>
+
+    <div class="overlay" id="overlay" onclick="closeAll()"></div>
+    <div class="toast" id="toast">Action Successful</div>
+
+    <div class="sidebar" id="sidebar">
+        <div style="position:absolute; top:15px; right:15px; font-size:24px; padding:10px; color:var(--text-muted); cursor:pointer;" onclick="closeAll()">&times;</div>
+        <div class="profile">
+            <div class="avatar">K</div>
+            <h2 style="color:var(--text);">Kashif</h2>
+            <p style="color: var(--accent); font-weight:bold; margin-bottom: 8px; font-size: 0.9rem;">Elite Full-Stack Architect</p>
+        </div>
+        
+        <a href="index.html" class="menu-item" onclick="closeAll()"><span>&#8962;</span> Home</a>
+        
+        <div class="menu-item" style="background: var(--screen); color: var(--accent); font-weight: bold;"><span>log</span> Log Calculator</div>
+        
+        <a href="exponent.html" class="menu-item" onclick="closeAll()"><span>^</span> Exponent Calculator</a>
+        <a href="fraction.html" class="menu-item" onclick="closeAll()"><span>½</span> Fraction Calculator</a>
+        <a href="percentage.html" class="menu-item" onclick="closeAll()"><span>%</span> Percentage Calculator</a>
+        
+        <div class="menu-item" onclick="openSettings()"><span>&#9881;</span> Settings</div>
+        <a href="contact.html" class="menu-item" onclick="closeAll()"><span>&#128100;</span> Contact Developer</a>
+    </div>
+
+    <div class="modal" id="modal-settings">
+        <span class="close-modal" onclick="closeAll()">&times;</span>
+        <h3>Settings</h3>
+        <div class="switch-container">
+            <span class="switch-label">Light Mode</span>
+            <label class="switch"><input type="checkbox" id="theme-toggle" onchange="toggleTheme()"><span class="slider"></span></label>
+        </div>
+        <button class="modal-btn" onclick="showToast('Preferences Saved'); closeAll()">Done</button>
+    </div>
+
+    <header>
+        <div class="hamburger" onclick="openSidebar()">&#9776;</div>
+        <div class="brand">CALCULATOR<span>.NET</span></div>
+        <div style="width: 24px;"></div>
+    </header>
+
+    <div class="main-content">
+        
+        <div class="calc-body">
+            <h2 style="color:var(--text); text-align:center; margin-bottom:20px;">Logarithm Calculator</h2>
+            <p style="color:var(--text-muted); text-align:center; margin-bottom:20px; font-size:0.9rem;">
+                Fill any <strong>2 fields</strong> to calculate the 3rd. <br>Type "e" for Euler's number.
+            </p>
+
+            <div class="equation-display" id="equation-viz">
+                log<sub>b</sub>(x) = y
+            </div>
+
+            <div class="log-input-container">
+                <div class="log-field">
+                    <label>Base (b)</label>
+                    <input type="text" id="val-b" class="log-input" placeholder="e.g. 10, e, 2">
+                </div>
+                
+                <div class="log-field">
+                    <label>Argument (x)</label>
+                    <input type="number" id="val-x" class="log-input" placeholder="e.g. 100">
+                </div>
+                
+                <div class="log-field">
+                    <label>Result (y)</label>
+                    <input type="number" id="val-y" class="log-input" placeholder="Result">
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn-clear" onclick="clearFields()">Clear</button>
+                <button class="btn-calc" onclick="calculateLog()">Calculate</button>
+            </div>
+        </div>
+
+        <div class="scroll-indicator" style="color:var(--accent); text-align:center; margin-bottom:20px; cursor:pointer;" onclick="document.getElementById('content-section').scrollIntoView({behavior: 'smooth'})">
+            READ FULL GUIDE &#8595;
+        </div>
+
+        <div class="seo-section" id="content-section">
+            <h1>Comprehensive Guide to Logarithms: Formulas, Rules & Real-World Uses</h1>
+            
+            <p>Welcome to <strong>Kashif's Professional Log Calculator</strong>. In the vast landscape of mathematics, few concepts are as powerful yet frequently misunderstood as the logarithm. Whether you are a computer science student analyzing algorithm complexity, a chemist calculating pH levels, or a financial analyst looking at compound interest, understanding logarithms is non-negotiable.</p>
+
+            <p>This tool is designed to instantly solve the logarithmic equation <strong>log<sub>b</sub>(x) = y</strong> by allowing you to input any two known variables to find the third. But beyond the calculation, this page serves as an extensive educational resource to master the theory behind the numbers.</p>
+
+            <h2>1. What Exactly is a Logarithm?</h2>
+            <p>At its core, a logarithm is the <strong>inverse operation of exponentiation</strong>. While exponentiation asks, "What do I get if I multiply base <em>b</em> by itself <em>y</em> times?", a logarithm asks the reverse question: "How many times must I multiply base <em>b</em> by itself to get the number <em>x</em>?"</p>
+            
+            <div class="formula-box">
+                Exponential Form: b<sup>y</sup> = x <br>
+                Logarithmic Form: log<sub>b</sub>(x) = y
+            </div>
+
+            <p>Here, <strong>b</strong> represents the base, <strong>x</strong> is the argument (the number we are analyzing), and <strong>y</strong> is the exponent or the logarithm result. These two equations are mathematically equivalent. For example, because 2 multiplied by itself 3 times equals 8 (2<sup>3</sup> = 8), we can say that log<sub>2</sub>(8) = 3.</p>
+
+            <h3>Why do we need them?</h3>
+            <p>Logarithms allow us to work with very large or very small numbers by converting multiplication into addition. Before computers existed, this was the primary way scientists performed complex calculations using "slide rules" and look-up tables.</p>
+
+            <h2>2. The "Big Three" Bases</h2>
+            <p>While the base <em>b</em> can technically be any positive number not equal to 1, three specific bases dominate the world of science and math:</p>
+            
+            <ul>
+                <li><strong>Common Logarithm (Base 10):</strong> Usually written simply as <code>log(x)</code>. This is the standard for the decimal system, scientific notation, and engineering (e.g., Decibels). If you see "log" without a base number, assume it is base 10.</li>
+                <li><strong>Natural Logarithm (Base <em>e</em>):</strong> Written as <code>ln(x)</code>. The base is Euler's number (<em>e</em> ≈ 2.71828). This is the language of nature, physics, and calculus, used for calculating continuous growth, radioactive decay, and heat cooling.</li>
+                <li><strong>Binary Logarithm (Base 2):</strong> Written as <code>log2(x)</code>. This is fundamental to Computer Science. It measures bits, bandwidth, and the time complexity of algorithms (Big O notation).</li>
+            </ul>
+
+            <h2>3. The 7 Essential Laws of Logarithms</h2>
+            <p>To manipulate logarithmic equations, you must follow specific algebraic rules. These rules are critical for simplifying complex math problems.</p>
+
+            <h3>Rule 1: The Product Rule</h3>
+            <p>The log of a product is the sum of the logs. This transforms multiplication into addition.</p>
+            <div class="formula-box">log<sub>b</sub>(M × N) = log<sub>b</sub>(M) + log<sub>b</sub>(N)</div>
+            <p><em>Example:</em> log(100) = log(10 × 10) = log(10) + log(10) = 1 + 1 = 2.</p>
+
+            <h3>Rule 2: The Quotient Rule</h3>
+            <p>The log of a quotient (fraction) is the difference of the logs. This transforms division into subtraction.</p>
+            <div class="formula-box">log<sub>b</sub>(M / N) = log<sub>b</sub>(M) - log<sub>b</sub>(N)</div>
+
+            <h3>Rule 3: The Power Rule</h3>
+            <p>This is perhaps the most useful rule. If the argument has an exponent, you can move the exponent to the front as a multiplier.</p>
+            <div class="formula-box">log<sub>b</sub>(M<sup>p</sup>) = p × log<sub>b</sub>(M)</div>
+
+            <h3>Rule 4: The Zero Rule</h3>
+            <p>The logarithm of 1 is always 0, regardless of the base (as long as base > 0).</p>
+            <div class="formula-box">log<sub>b</sub>(1) = 0</div>
+            <p><em>Reasoning:</em> Any number raised to the power of 0 equals 1.</p>
+
+            <h3>Rule 5: The Identity Rule</h3>
+            <p>The logarithm of the base itself is always 1.</p>
+            <div class="formula-box">log<sub>b</sub>(b) = 1</div>
+
+            <h3>Rule 6: Log of Zero (Undefined)</h3>
+            <p>You cannot take the log of zero or a negative number. As <em>x</em> approaches zero, the result approaches negative infinity.</p>
+            <div class="formula-box">log<sub>b</sub>(0) = Undefined</div>
+
+            <h3>Rule 7: Change of Base Formula</h3>
+            <p>Most physical calculators only have buttons for log and ln. To calculate a weird base like 5, you use this formula:</p>
+            <div class="formula-box">log<sub>b</sub>(x) = log<sub>k</sub>(x) / log<sub>k</sub>(b)</div>
+            <p><em>Example:</em> To calculate log<sub>5</sub>(100), you can type <code>ln(100) / ln(5)</code> into a standard calculator.</p>
+
+            <h2>4. Real-World Applications</h2>
+            <p>Logarithms are not just abstract theory; they govern the measurement of the world around us.</p>
+            
+            <h3>Chemistry: The pH Scale</h3>
+            <p>Acidity is measured in pH, which is a logarithmic scale of the concentration of Hydrogen ions (H+). A solution with a pH of 3 is not "twice" as acidic as a pH of 6—it is 1,000 times more acidic because the scale is logarithmic (base 10).</p>
+            
+            <h3>Geology: The Richter Scale</h3>
+            <p>Earthquakes are measured on the Richter scale. An earthquake of magnitude 6.0 is 10 times more powerful than a 5.0, and 100 times more powerful than a 4.0. Without logs, the numbers for large earthquakes would be too massive to write down conveniently.</p>
+
+            <h3>Sound: Decibels (dB)</h3>
+            <p>Human hearing is logarithmic. We perceive volume increases in ratios. The Decibel scale uses logs to compress the massive range of sound pressure levels into manageable numbers (0dB to 140dB).</p>
+
+            <h3>Finance: Compound Interest</h3>
+            <p>If you want to know how long it will take for your investment to double at a 5% interest rate, you need logarithms. The formula involves solving for time <em>t</em>, which is in the exponent position, requiring the use of <code>ln</code> to solve.</p>
+
+            <h2>5. Frequently Asked Questions (FAQ)</h2>
+            
+            <p><strong>Q: Can I use a negative base?</strong><br>
+            A: No. In standard real-number mathematics, the base <em>b</em> must be positive and not equal to 1. Negative bases result in complex (imaginary) numbers, which this calculator does not support.</p>
+
+            <p><strong>Q: Why does log(0) give an error?</strong><br>
+            A: There is no power to which you can raise a positive number to get zero. You can get infinitely close (asymptote), but you never touch zero. Therefore, it is mathematically undefined.</p>
+
+            <p><strong>Q: What is the "e" button for?</strong><br>
+            A: Typing "e" in the base field tells our calculator to use Euler's constant (approx 2.718), effectively switching the mode to calculate the Natural Logarithm (ln).</p>
+
+            <h2>6. How to Use Kashif's Log Calculator</h2>
+            <p>Our tool is flexible. Here are the three ways to use it:</p>
+            <ol>
+                <li><strong>Find the Log (y):</strong> Enter the Base (e.g., 10) and the Argument (e.g., 1000). Leave "Result" empty. Click Calculate. The answer will be 3.</li>
+                <li><strong>Find the Argument (x):</strong> Enter the Base (e.g., 2) and the Result/Exponent (e.g., 5). Leave "Argument" empty. Click Calculate. The answer will be 32 (because 2<sup>5</sup> = 32).</li>
+                <li><strong>Find the Base (b):</strong> Enter the Argument (e.g., 81) and the Result (e.g., 4). Leave "Base" empty. Click Calculate. The answer will be 3 (because 3<sup>4</sup> = 81).</li>
+            </ol>
+
+            <p style="margin-top: 40px; border-top: 1px solid var(--screen); padding-top:20px;">
+                <em>This tool is developed by Kashif, aiming to provide high-performance, ad-supported educational utilities for the global web. For more math tools, check the sidebar menu.</em>
+            </p>
+        </div>
+        
+        <div class="footer-credit">
+            Architected & Engineered by <span>Kashif Dawar</span> | <a href="index.html">Home</a> | <a href="contact.html">Contact Us</a> | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Use</a>
+        </div>
+    </div>
+
+    <script>
+        // --- CORE STATE & UI ---
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const themeToggle = document.getElementById('theme-toggle');
+
+        window.onload = function() {
+            // Apply Theme
+            if (localStorage.getItem('theme') === 'light') { 
+                document.body.classList.add('light-mode'); 
+                themeToggle.checked = true; 
+            }
+        };
+
+        function toggleTheme() {
+            if (themeToggle.checked) { 
+                document.body.classList.add('light-mode'); 
+                localStorage.setItem('theme', 'light'); 
+            } else { 
+                document.body.classList.remove('light-mode'); 
+                localStorage.setItem('theme', 'dark'); 
+            }
+        }
+
+        // --- NAVIGATION ---
+        function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('active'); }
+        
+        function closeAll() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            document.getElementById('modal-settings').classList.remove('active');
+        }
+
+        function openSettings() {
+            closeAll();
+            setTimeout(() => { 
+                document.getElementById('modal-settings').classList.add('active'); 
+                overlay.classList.add('active'); 
+            }, 300);
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast'); 
+            toast.innerText = msg; 
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // --- LOG LOGIC ---
+        function clearFields() {
+            document.getElementById('val-b').value = '';
+            document.getElementById('val-x').value = '';
+            document.getElementById('val-y').value = '';
+            showToast('Fields Cleared');
+        }
+
+        function calculateLog() {
+            let b_raw = document.getElementById('val-b').value.trim().toLowerCase();
+            let x_raw = document.getElementById('val-x').value;
+            let y_raw = document.getElementById('val-y').value;
+
+            // Handle 'e'
+            let b = (b_raw === 'e') ? Math.E : parseFloat(b_raw);
+            let x = parseFloat(x_raw);
+            let y = parseFloat(y_raw);
+
+            // Determine which variable to solve for
+            // We need exactly 2 filled fields
+            let hasB = !isNaN(b);
+            let hasX = !isNaN(x);
+            let hasY = !isNaN(y);
+
+            try {
+                if (hasB && hasX && !hasY) {
+                    // Solve for Y (Logarithm) -> y = log_b(x)
+                    if (b <= 0 || b === 1) throw new Error("Base must be > 0 and != 1");
+                    if (x <= 0) throw new Error("Argument must be > 0");
+                    let res = Math.log(x) / Math.log(b);
+                    document.getElementById('val-y').value = parseFloat(res.toFixed(6));
+                    showToast('Calculated Result (y)');
+                }
+                else if (hasB && !hasX && hasY) {
+                    // Solve for X (Argument) -> x = b^y
+                    let res = Math.pow(b, y);
+                    document.getElementById('val-x').value = parseFloat(res.toFixed(6));
+                    showToast('Calculated Argument (x)');
+                }
+                else if (!hasB && hasX && hasY) {
+                    // Solve for B (Base) -> b = x^(1/y)
+                    if (x <= 0) throw new Error("Argument must be > 0");
+                    // Avoid division by zero
+                    if (y === 0) throw new Error("Result cannot be 0 when finding base");
+                    let res = Math.pow(x, 1/y);
+                    document.getElementById('val-b').value = parseFloat(res.toFixed(6));
+                    showToast('Calculated Base (b)');
+                }
+                else {
+                    showToast('Error: Please fill exactly 2 fields.');
+                }
+            } catch (err) {
+                showToast(err.message);
+            }
+        }
+    </script>
+</body>
+</html>
