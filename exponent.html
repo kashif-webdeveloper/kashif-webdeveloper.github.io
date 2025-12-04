@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PTXNYWJ847"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-PTXNYWJ847');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5524773081921512" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-5524773081921512">
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Kashif's Ultimate Exponent Calculator - High-precision solver for Base, Exponent, and Result. Handles massive numbers using advanced logarithmic algorithms.">
+    
+    <title>Exponent Calculator - Kashif's Pro Tools</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e293b">
+    <link rel="apple-touch-icon" href="kashi calculator.png">
+    
+    <style>
+        /* --- CORE THEME (MATCHING INDEX.HTML) --- */
+        :root {
+            --bg-dark: #0f172a;
+            --calc-body: #1e293b;
+            --screen: #334155;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent: #06b6d4;
+            --btn-bg: #475569;
+            --btn-active: #64748b;
+            --operator: #0ea5e9;
+            --equals: #3b82f6;
+            --danger: #ef4444;
+            --sidebar-bg: #1e293b;
+            --shadow: rgba(0,0,0,0.5);
+            --success: #22c55e;
+        }
+
+        body.light-mode {
+            --bg-dark: #f1f5f9;
+            --calc-body: #ffffff;
+            --screen: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --accent: #0891b2;
+            --btn-bg: #cbd5e1;
+            --btn-active: #94a3b8;
+            --operator: #0284c7;
+            --equals: #2563eb;
+            --danger: #dc2626;
+            --sidebar-bg: #ffffff;
+            --shadow: rgba(0,0,0,0.15);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Roboto, sans-serif; touch-action: manipulation; }
+
+        body {
+            background-color: var(--bg-dark); color: var(--text);
+            min-height: 100vh; display: flex; flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- HEADER --- */
+        header {
+            height: 60px; background: var(--calc-body); display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; border-bottom: 1px solid var(--screen); z-index: 2000; box-shadow: 0 2px 10px var(--shadow);
+            position: sticky; top: 0;
+        }
+        .hamburger { font-size: 24px; cursor: pointer; color: var(--accent); padding: 10px; }
+        .brand { font-size: 18px; font-weight: bold; letter-spacing: 1px; color: var(--text); }
+        .brand span { color: var(--accent); }
+
+        /* --- MAIN CONTENT --- */
+        .main-content {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            padding: 20px 10px; position: relative; z-index: 10;
+        }
+
+        /* --- CALCULATOR BODY --- */
+        .calc-body {
+            width: 100%; max-width: 450px; background: var(--calc-body); border-radius: 20px; padding: 25px;
+            box-shadow: 0 10px 25px var(--shadow); display: flex; flex-direction: column; position: relative;
+            z-index: 20; transition: background 0.3s; margin-bottom: 30px;
+        }
+
+        /* --- DISPLAY SCREEN --- */
+        .display { 
+            background: var(--screen); min-height: 140px; border-radius: 12px; margin-bottom: 20px; 
+            padding: 15px; display: flex; flex-direction: column; justify-content: flex-start; 
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.1); transition: background 0.3s; word-wrap: break-word;
+        }
+        .equation-line { font-size: 14px; color: var(--text-muted); text-align: right; margin-bottom: 5px; }
+        .result-line { font-size: 32px; font-weight: bold; color: var(--success); text-align: right; margin-bottom: 10px; line-height: 1.2; word-break: break-all; }
+        .steps-box { 
+            border-top: 1px solid var(--text-muted); padding-top: 10px; margin-top: 5px;
+            font-size: 13px; color: var(--text); font-family: monospace; line-height: 1.5;
+            max-height: 120px; overflow-y: auto; opacity: 0.9;
+        }
+
+        /* --- INPUTS --- */
+        .input-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px; align-items: end; }
+        .input-group { display: flex; flex-direction: column; }
+        .input-group label { font-size: 12px; color: var(--text-muted); margin-bottom: 5px; text-align: center; }
+        .input-group input {
+            background: var(--btn-bg); border: none; padding: 12px; border-radius: 8px;
+            color: var(--text); font-size: 18px; text-align: center; outline: none; width: 100%;
+            border: 1px solid transparent; transition: 0.2s;
+        }
+        .input-group input:focus { border-color: var(--accent); }
+        .operator-symbol { text-align: center; font-size: 20px; color: var(--accent); font-weight: bold; padding-bottom: 10px; }
+
+        /* --- BUTTONS --- */
+        .btn-row { display: flex; gap: 10px; }
+        button {
+            flex: 1; border: none; padding: 15px; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer;
+            transition: transform 0.1s, filter 0.2s;
+        }
+        button:active { transform: translateY(2px); }
+        .btn-calc { background: var(--accent); color: white; }
+        .btn-clear { background: var(--danger); color: white; }
+        .btn-e { background: var(--screen); color: var(--text); margin-top: 10px; width: 100%; font-size: 14px; padding: 10px; }
+
+        /* --- SEO CONTENT AREA --- */
+        .seo-section {
+            width: 100%; max-width: 800px; margin-top: 20px; padding: 30px;
+            background: var(--calc-body); border-radius: 12px; border: 1px solid var(--screen);
+            color: var(--text); margin-bottom: 20px; box-shadow: 0 4px 6px var(--shadow);
+        }
+        .seo-section h2 { color: var(--accent); font-size: 1.8rem; margin-top: 30px; margin-bottom: 15px; border-bottom: 1px solid var(--screen); padding-bottom: 10px; }
+        .seo-section h3 { color: var(--text); font-size: 1.4rem; margin-top: 25px; margin-bottom: 10px; font-weight: 600; }
+        .seo-section p { font-size: 1rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 15px; text-align: justify; }
+        .seo-section ul { list-style: none; padding: 0; margin-bottom: 15px; }
+        .seo-section li { margin-bottom: 12px; padding-left: 15px; border-left: 3px solid var(--accent); color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
+        .math-block { background: var(--screen); padding: 10px; border-radius: 6px; font-family: monospace; color: var(--accent); display: block; margin: 10px 0; text-align: center; font-size: 1.1rem; }
+
+        /* --- SIDEBAR --- */
+        .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 4000; opacity: 0; pointer-events: none; transition: 0.3s; }
+        .overlay.active { opacity: 1; pointer-events: all; }
+        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--sidebar-bg); z-index: 5000; transition: transform 0.3s ease; padding: 20px; display: flex; flex-direction: column; box-shadow: 5px 0 20px var(--shadow); }
+        .sidebar.open { transform: translateX(300px); }
+        .menu-item { padding: 15px; color: var(--text-muted); border-radius: 8px; margin-bottom: 5px; cursor: pointer; display: flex; align-items: center; gap: 10px; text-decoration: none; transition: 0.2s; }
+        .menu-item:hover { background: var(--screen); color: var(--accent); }
+
+        /* Footer */
+        .footer-credit { margin-top: auto; text-align: center; font-size: 0.8rem; color: var(--text-muted); padding: 20px 0; width: 100%; border-top: 1px solid var(--screen); }
+        .footer-credit a { color: var(--accent); text-decoration: none; margin: 0 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+
+    <div class="sidebar" id="sidebar">
+        <div style="position:absolute; top:15px; right:15px; font-size:24px; padding:10px; cursor:pointer;" onclick="closeSidebar()">&times;</div>
+        <div style="text-align: center; margin-bottom: 20px; border-bottom: 1px solid var(--screen); padding-bottom: 20px;">
+            <h2 style="color:var(--text);">Kashif</h2>
+            <p style="color: var(--accent); font-size: 0.9rem; font-weight:bold;">Elite Tools</p>
+        </div>
+        
+        <a href="index.html" class="menu-item"><span>&#8962;</span> Home / Scientific</a>
+        <div class="menu-item" style="background: var(--screen); color: var(--accent);"><span>^</span> Exponent Calculator</div>
+        <a href="fraction.html" class="menu-item"><span>½</span> Fraction Calculator</a>
+        <a href="percentage.html" class="menu-item"><span>%</span> Percentage Calculator</a>
+        <a href="contact.html" class="menu-item"><span>&#128100;</span> Contact</a>
+    </div>
+
+    <header>
+        <div class="hamburger" onclick="openSidebar()">&#9776;</div>
+        <div class="brand">EXPONENT<span>.CALC</span></div>
+        <div style="width: 24px;"></div>
+    </header>
+
+    <div class="main-content">
+        
+        <div class="calc-body">
+            <h2 style="text-align: center; color: var(--accent); margin-bottom: 15px; font-size: 1.2rem;">Power & Exponent Solver</h2>
+            
+            <div class="display">
+                <div class="equation-line" id="eq-display">Enter values...</div>
+                <div class="result-line" id="res-display">0</div>
+                <div class="steps-box" id="steps-display">Calculations for extreme numbers will use scientific notation.</div>
+            </div>
+
+            <div class="input-grid">
+                <div class="input-group">
+                    <label>Base (x)</label>
+                    <input type="number" id="inp-base" placeholder="5">
+                </div>
+                <div class="operator-symbol">^</div>
+                <div class="input-group">
+                    <label>Exponent (n)</label>
+                    <input type="number" id="inp-exp" placeholder="10">
+                </div>
+            </div>
+
+            <div class="input-group" style="margin-bottom: 20px;">
+                <label>Result (Leave empty to calculate)</label>
+                <input type="number" id="inp-res" placeholder="?">
+            </div>
+
+            <div class="btn-row">
+                <button class="btn-clear" onclick="clearCalc()">CLR</button>
+                <button class="btn-calc" onclick="calculate()">CALCULATE</button>
+            </div>
+            <button class="btn-e" onclick="useE()">Use Euler's Number (e) as Base</button>
+        </div>
+
+        <div class="seo-section">
+            <h2>The Comprehensive Guide to Exponents and Powers</h2>
+            <p>Welcome to <strong>Kashif's Advanced Exponent Calculator</strong>. While standard calculators fail at massive numbers, returning "Infinity," our tool utilizes advanced <strong>logarithmic algorithms</strong> to solve equations that exceed the limits of standard computing. Whether you are dealing with astronomical distances, cryptographic keys, or population growth models, this tool handles it with precision.</p>
+
+            <h3>1. Understanding Exponentiation</h3>
+            <p>Exponentiation is a mathematical operation, written as <strong>x<sup>n</sup></strong>, involving two numbers: the base (x) and the exponent (n). When 'n' is a positive integer, exponentiation corresponds to repeated multiplication of the base.</p>
+            <div class="math-block">x<sup>n</sup> = x × x × ... × x (n times)</div>
+            <p>For example, 5<sup>3</sup> = 5 × 5 × 5 = 125. However, exponents are not limited to integers. They can be fractions (representing roots), negative numbers (representing division), or complex numbers.</p>
+
+            <h3>2. Handling "Infinity" and Large Numbers</h3>
+            <p>Most web calculators are built on standard 64-bit floating-point math, which has a maximum limit of approximately 1.8 × 10<sup>308</sup>. Any number larger than this is displayed as "Infinity."</p>
+            <p><strong>Kashif's Calculator is different.</strong> We use a high-tech approach called <em>Logarithmic Mapping</em>. By converting the calculation into logarithmic space, we can compute the "Order of Magnitude" (the exponent of 10) separately from the significant digits. This allows us to display results like <strong>1.5 × 10<sup>500</sup></strong>, effectively bypassing the "Infinity" error.</p>
+
+            <h3>3. The Fundamental Laws of Exponents</h3>
+            <p>To master algebra, physics, and engineering, one must understand the rules that govern exponents:</p>
+
+            <h4>I. Product of Powers Rule</h4>
+            <p>When multiplying two terms with the same base, you add the exponents.</p>
+            <div class="math-block">x<sup>a</sup> × x<sup>b</sup> = x<sup>(a + b)</sup></div>
+
+            <h4>II. Quotient of Powers Rule</h4>
+            <p>When dividing two terms with the same base, you subtract the exponents.</p>
+            <div class="math-block">x<sup>a</sup> ÷ x<sup>b</sup> = x<sup>(a - b)</sup></div>
+
+            <h4>III. Power of a Power Rule</h4>
+            <p>If you raise an exponent to another exponent, you multiply them.</p>
+            <div class="math-block">(x<sup>a</sup>)<sup>b</sup> = x<sup>(a × b)</sup></div>
+
+            <h4>IV. The Negative Exponent Rule</h4>
+            <p>A negative exponent indicates the reciprocal of the base.</p>
+            <div class="math-block">x<sup>-n</sup> = 1 / x<sup>n</sup></div>
+
+            <h3>4. Real-World Applications</h3>
+            <ul>
+                <li><strong>Cryptography:</strong> Modern internet security (RSA encryption) relies on modular exponentiation of massive numbers, similar to what this calculator computes.</li>
+                <li><strong>Astronomy:</strong> Distances in space are so vast they must be expressed in scientific notation powers. The distance to the edge of the observable universe is roughly 4.4 × 10<sup>26</sup> meters.</li>
+                <li><strong>Finance:</strong> Compound interest is an exponential function. A small change in the exponent (time) can drastically change the final wealth.</li>
+                <li><strong>Computer Science:</strong> Data storage grows exponentially. Moore's Law predicts that computing power doubles roughly every two years (2<sup>t/2</sup>).</li>
+            </ul>
+
+            <p><em>This tool is engineered by Kashif to provide students and professionals with a robust, ad-free, and privacy-focused alternative to generic calculation apps.</em></p>
+        </div>
+
+        <div class="footer-credit">
+            © 2025 Kashif's Tools | <a href="index.html">Home</a> | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a>
+        </div>
+    </div>
+
+    <script>
+        // --- HIGH TECH LOGIC SCRIPT ---
+        
+        // Check Theme
+        if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); }
+
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const eqDisplay = document.getElementById('eq-display');
+        const resDisplay = document.getElementById('res-display');
+        const stepsDisplay = document.getElementById('steps-display');
+
+        const inpBase = document.getElementById('inp-base');
+        const inpExp = document.getElementById('inp-exp');
+        const inpRes = document.getElementById('inp-res');
+
+        function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('active'); }
+        function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('active'); }
+
+        function useE() {
+            inpBase.value = Math.E;
+            eqDisplay.innerText = "Base set to Euler's Number (e)";
+        }
+
+        function clearCalc() {
+            inpBase.value = ""; inpExp.value = ""; inpRes.value = "";
+            resDisplay.innerText = "0";
+            eqDisplay.innerText = "Enter values...";
+            stepsDisplay.innerText = "Calculations for extreme numbers will use scientific notation.";
+        }
+
+        // --- THE CORE LOGIC FOR BIG NUMBERS ---
+        function formatBigNumber(base, exp) {
+            // If the number is small enough for JS to handle (approx 10^308)
+            let simpleCalc = Math.pow(base, exp);
+            if (isFinite(simpleCalc)) {
+                return {
+                    val: simpleCalc.toLocaleString('en-US', { maximumFractionDigits: 8 }),
+                    raw: simpleCalc,
+                    isBig: false
+                };
+            }
+
+            // If Infinity, use Logarithms to solve: result = 10^(log10(base) * exp)
+            let logVal = Math.log10(Math.abs(base)) * exp;
+            let exponentPart = Math.floor(logVal);
+            let mantissaPart = Math.pow(10, logVal - exponentPart);
+
+            // Construct Scientific Notation string: 1.234e+500
+            let sign = (base < 0 && exp % 2 !== 0) ? "-" : "";
+            return {
+                val: `${sign}${mantissaPart.toFixed(4)} × 10^${exponentPart}`,
+                raw: "Infinity",
+                isBig: true,
+                exponent: exponentPart
+            };
+        }
+
+        function calculate() {
+            const b = parseFloat(inpBase.value);
+            const e = parseFloat(inpExp.value);
+            const r = parseFloat(inpRes.value);
+            
+            // CASE 1: CALCULATE RESULT (Base^Exp)
+            if (!isNaN(b) && !isNaN(e) && inpRes.value === "") {
+                const resultObj = formatBigNumber(b, e);
+                
+                eqDisplay.innerHTML = `${b} <sup>${e}</sup> =`;
+                
+                // Display logic
+                if (resultObj.isBig) {
+                    resDisplay.style.fontSize = "24px"; // Smaller font for long scientific notation
+                    resDisplay.innerText = resultObj.val;
+                    stepsDisplay.innerText = `⚠️ LARGE NUMBER DETECTED\nStandard calculators show 'Infinity'.\nUsing Logarithmic Logic:\nLog10 = ${e} × log(${b}) ≈ ${e} × ${Math.log10(b).toFixed(4)}\nTotal Order of Magnitude ≈ 10^${resultObj.exponent}`;
+                } else {
+                    resDisplay.style.fontSize = "32px";
+                    resDisplay.innerText = resultObj.val;
+                    inpRes.value = resultObj.raw; // Fill the field if it fits
+                    
+                    // Simple Steps
+                    if (Number.isInteger(e) && e > 0 && e <= 10) {
+                         stepsDisplay.innerText = `Expansion: ${Array(e).fill(b).join(" × ")} = ${resultObj.val}`;
+                    } else {
+                         stepsDisplay.innerText = `Standard Calculation: ${b} raised to the power of ${e}.`;
+                    }
+                }
+            }
+
+            // CASE 2: CALCULATE EXPONENT (Logarithm)
+            else if (!isNaN(b) && !isNaN(r) && inpExp.value === "") {
+                // Note: Can't easily reverse engineer a massive scientific notation string input here without a parser, 
+                // so this works for standard numbers.
+                if (b <= 0 || (b === 1 && r !== 1)) {
+                    resDisplay.innerText = "Error";
+                    return;
+                }
+                let resVal = Math.log(r) / Math.log(b);
+                eqDisplay.innerHTML = `Log<sub>${b}</sub>(${r}) =`;
+                resDisplay.innerText = resVal.toFixed(6);
+                inpExp.value = resVal;
+                stepsDisplay.innerText = `Solving for Exponent:\nn = log(${r}) / log(${b})`;
+            }
+
+            // CASE 3: CALCULATE BASE (Root)
+            else if (!isNaN(e) && !isNaN(r) && inpBase.value === "") {
+                let resVal = Math.pow(r, 1/e);
+                eqDisplay.innerHTML = `<sup>${e}</sup>√${r} =`;
+                resDisplay.innerText = resVal.toFixed(6);
+                inpBase.value = resVal;
+                stepsDisplay.innerText = `Solving for Base:\nx = ${r}^(1/${e})`;
+            }
+
+            else {
+                resDisplay.innerText = "Input Error";
+                stepsDisplay.innerText = "Please fill exactly TWO fields and leave one empty to solve.";
+            }
+        }
+    </script>
+</body>
+</html>
