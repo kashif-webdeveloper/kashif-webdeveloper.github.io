@@ -18,9 +18,11 @@
     <meta name="description" content="Kashif's Pro Calculator - A free, high-performance scientific calculator for the web. Solve algebra, trigonometry, and logarithms instantly with privacy-focused local processing.">
     
     <title>Kashif's Pro Calculator - Scientific & Basic Web Tool</title>
+    
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#1e293b">
-    <link rel="apple-touch-icon" href="Kashi calculator.png">
+    
+    <link rel="apple-touch-icon" href="kashi calculator.png">
     
     <style>
         /* --- RESET & CORE --- */
@@ -110,7 +112,7 @@
             60% {transform: translateY(-3px);}
         }
 
-        /* --- SEO CONTENT (Optimized for AdSense) --- */
+        /* --- SEO CONTENT --- */
         .seo-section {
             width: 100%; max-width: 800px; margin-top: 10px; padding: 30px;
             background: var(--calc-body); border-radius: 12px; border: 1px solid var(--screen);
@@ -130,7 +132,7 @@
             padding: 20px 0; width: 100%; border-top: 1px solid var(--screen);
         }
         .footer-credit span { color: var(--accent); font-weight: 700; }
-        .footer-credit a { color: var(--accent); text-decoration: none; margin: 0 5px; }
+        .footer-credit a { color: var(--accent); text-decoration: none; margin: 0 5px; cursor: pointer; }
 
         /* --- TABS & DISPLAY --- */
         .tabs { display: flex; background: var(--bg-dark); border-radius: 10px; padding: 4px; margin-bottom: 15px; transition: background 0.3s; }
@@ -160,12 +162,12 @@
         .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 4000; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(2px); }
         .overlay.active { opacity: 1; pointer-events: all; }
 
-        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--sidebar-bg); z-index: 5000; transition: transform 0.3s ease, background 0.3s; box-shadow: 5px 0 20px var(--shadow); padding: 20px; display: flex; flex-direction: column; }
+        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--sidebar-bg); z-index: 5000; transition: transform 0.3s ease, background 0.3s; box-shadow: 5px 0 20px var(--shadow); padding: 20px; display: flex; flex-direction: column; overflow-y: auto; }
         .sidebar.open { transform: translateX(300px); }
 
         .profile { text-align: center; border-bottom: 1px solid var(--screen); padding-bottom: 20px; margin-bottom: 20px; }
         .avatar { width: 80px; height: 80px; background: linear-gradient(45deg, var(--accent), #3b82f6); border-radius: 50%; margin: 40px auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; color: white; }
-        .menu-item { padding: 15px; color: var(--text-muted); border-radius: 8px; margin-bottom: 5px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; }
+        .menu-item { padding: 15px; color: var(--text-muted); border-radius: 8px; margin-bottom: 5px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; position: relative; z-index: 5001; }
         .menu-item:hover, .menu-item:active { background: var(--screen); color: var(--accent); }
 
         /* --- MODALS --- */
@@ -205,11 +207,16 @@
             <p style="color: var(--accent); font-weight:bold; margin-bottom: 8px; font-size: 0.9rem;">Elite Full-Stack Architect</p>
             <p style="color: var(--text-muted); font-size: 0.8rem;">Innovative developer creating seamless solutions.</p>
         </div>
+        
         <div class="menu-item" onclick="handleNav('home')"><span>&#8962;</span> Home</div>
         <div class="menu-item" onclick="handleNav('sci')"><span>&#8730;</span> Scientific Mode</div>
+        
+        <a href="fraction.html" class="menu-item" style="text-decoration:none;" onclick="closeAll()"><span>½</span> Fraction Calculator</a>
+        <a href="percentage.html" class="menu-item" style="text-decoration:none;" onclick="closeAll()"><span>%</span> Percentage Calculator</a>
+        
         <div class="menu-item" onclick="handleNav('settings')"><span>&#9881;</span> Settings</div>
         
-        <a href="contact.html" class="menu-item" style="text-decoration:none;"><span>&#128100;</span> Contact Developer</a>
+        <a href="contact.html" class="menu-item" style="text-decoration:none;" onclick="closeAll()"><span>&#128100;</span> Contact Developer</a>
         
         <div class="menu-item" onclick="handleNav('signin')" style="margin-top:auto; background:var(--accent); color:white; justify-content: center; font-weight:bold;">Sign In</div>
     </div>
@@ -453,21 +460,24 @@
         }
 
         function handleNav(action) {
-            closeAll();
-
+            // Internal Navigation Handler
             if (action === 'home') {
+                closeAll();
                 switchTab('basic');
                 clearCalc();
                 showToast('Welcome Home');
             } 
             else if (action === 'sci') {
+                closeAll();
                 switchTab('sci');
                 showToast('Scientific Mode Activated');
             }
             else if (action === 'settings') {
+                closeAll();
                 setTimeout(() => { document.getElementById('modal-settings').classList.add('active'); overlay.classList.add('active'); }, 300);
             }
             else if (action === 'signin') {
+                closeAll();
                 setTimeout(() => { document.getElementById('modal-signin').classList.add('active'); overlay.classList.add('active'); }, 300);
             }
         }
