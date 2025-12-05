@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PTXNYWJ847"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-PTXNYWJ847');
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5524773081921512" crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-5524773081921512">
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Calculate Standard Deviation, Variance, Mean, and Margin of Error instantly. Supports large datasets (Sample & Population) with step-by-step mathematical explanations.">
+    <meta name="keywords" content="standard deviation calculator, variance calculator, statistics tool, sample vs population, mean calculator, standard error, kashif calculator">
+    <meta name="author" content="Kashif Dawar">
+    
+    <title>Standard Deviation Calculator | Kashif.Pro</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e293b">
+    <link rel="apple-touch-icon" href="kashi calculator.png">
+    
+    <style>
+        /* --- CORE VARIABLES --- */
+        :root {
+            --bg-dark: #0f172a;
+            --calc-body: #1e293b;
+            --screen: #334155;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --accent: #06b6d4;
+            --btn-bg: #475569;
+            --btn-active: #64748b;
+            --operator: #0ea5e9;
+            --equals: #3b82f6;
+            --danger: #ef4444;
+            --sidebar-bg: #1e293b;
+            --modal-bg: #1e293b;
+            --shadow: rgba(0,0,0,0.5);
+            --card-bg: #334155;
+            --border: #475569;
+            --bar-blue: #6082B6;
+            --bar-red: #dc2626;
+        }
+
+        body.light-mode {
+            --bg-dark: #f1f5f9;
+            --calc-body: #ffffff;
+            --screen: #e2e8f0;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --accent: #0891b2;
+            --btn-bg: #cbd5e1;
+            --btn-active: #94a3b8;
+            --operator: #0284c7;
+            --equals: #2563eb;
+            --danger: #dc2626;
+            --sidebar-bg: #ffffff;
+            --modal-bg: #ffffff;
+            --shadow: rgba(0,0,0,0.15);
+            --card-bg: #f8fafc;
+            --border: #cbd5e1;
+            --bar-blue: #93c5fd;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Roboto, sans-serif; touch-action: manipulation; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text);
+            height: 100vh; height: 100dvh; width: 100vw;
+            overflow: hidden; display: flex; flex-direction: column;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- HEADER & BRANDING --- */
+        header {
+            height: 60px; background: var(--calc-body); display: flex; align-items: center; justify-content: space-between;
+            padding: 0 20px; border-bottom: 1px solid var(--screen); z-index: 2000; box-shadow: 0 2px 10px var(--shadow);
+            transition: background 0.3s; flex-shrink: 0;
+        }
+        .hamburger { font-size: 24px; cursor: pointer; color: var(--accent); padding: 10px; }
+        
+        /* Updated Branding for AdSense Safety */
+        .brand { font-size: 20px; font-weight: 800; letter-spacing: 1px; color: var(--text); text-transform: uppercase; }
+        .brand span { color: var(--accent); }
+
+        /* --- LAYOUT --- */
+        .main-content {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            padding: 20px 10px; position: relative; z-index: 10; overflow-y: auto;
+        }
+
+        .tool-container {
+            width: 100%; max-width: 650px; background: var(--calc-body); border-radius: 20px; padding: 25px;
+            box-shadow: 0 10px 25px var(--shadow); margin-bottom: 30px; border: 1px solid var(--screen);
+            transition: background 0.3s;
+        }
+
+        h1 { color: var(--accent); font-size: 1.6rem; margin-bottom: 15px; text-align: center; border-bottom: 1px solid var(--screen); padding-bottom: 15px; }
+        .input-label { display: block; margin-bottom: 10px; color: var(--text-muted); font-size: 0.95rem; font-weight: bold; }
+
+        textarea {
+            width: 100%; height: 140px; background: var(--screen); color: var(--text); border: 2px solid var(--border);
+            border-radius: 12px; padding: 15px; font-size: 16px; resize: vertical; margin-bottom: 20px;
+            transition: border-color 0.2s; outline: none; font-family: monospace; line-height: 1.4;
+        }
+        textarea:focus { border-color: var(--accent); }
+
+        /* --- CONTROLS --- */
+        .controls { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; align-items: center; justify-content: center; }
+        
+        .radio-group { display: flex; background: var(--bg-dark); padding: 6px; border-radius: 10px; border: 1px solid var(--screen); }
+        .radio-option {
+            padding: 10px 25px; cursor: pointer; border-radius: 8px; color: var(--text-muted); font-size: 0.95rem; transition: 0.2s; user-select: none; font-weight: 500;
+        }
+        .radio-option.active { background: var(--accent); color: white; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+
+        .btn-action {
+            flex: 1; min-width: 140px; padding: 14px; font-size: 1rem; font-weight: bold; color: white; border: none; border-radius: 10px; cursor: pointer; transition: 0.2s;
+        }
+        .btn-calc { background: var(--equals); box-shadow: 0 4px 0 rgba(0,0,0,0.2); }
+        .btn-calc:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.2); }
+        .btn-clear { background: var(--danger); max-width: 120px; }
+
+        /* --- RESULT AREA --- */
+        .result-box { display: none; margin-top: 25px; animation: fadeIn 0.4s ease; }
+        .result-box.show { display: block; }
+
+        .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .stat-item { background: var(--card-bg); padding: 15px; border-radius: 10px; text-align: center; border: 1px solid var(--screen); overflow: hidden; box-shadow: 0 2px 5px var(--shadow); }
+        .stat-label { color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; font-weight: bold; }
+        .stat-value { color: var(--accent); font-size: 1.3rem; font-weight: 800; word-break: break-all; line-height: 1.2; }
+
+        /* --- TABLES & MATH --- */
+        .section-header { margin-top: 30px; border-top: 1px solid var(--screen); padding-top: 20px; color: var(--text); font-size: 1.2rem; margin-bottom: 15px; font-weight: bold; display: flex; align-items: center; gap: 10px; }
+        .section-header::before { content: ''; display: block; width: 4px; height: 20px; background: var(--accent); border-radius: 2px; }
+        
+        .math-display {
+            background: var(--bg-dark); padding: 20px; border-radius: 10px; font-family: 'Times New Roman', serif;
+            font-size: 1.15rem; color: var(--text); line-height: 1.7; border: 1px solid var(--screen);
+            overflow-x: auto; white-space: nowrap; margin-bottom: 20px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .table-wrapper { width: 100%; overflow-x: auto; margin-bottom: 25px; border-radius: 10px; border: 1px solid var(--screen); background: var(--bg-dark); }
+        .data-table { width: 100%; border-collapse: collapse; font-size: 0.95rem; min-width: 400px; }
+        .data-table th { background: var(--card-bg); color: var(--accent); padding: 12px 15px; text-align: left; white-space: nowrap; font-weight: bold; border-bottom: 2px solid var(--screen); }
+        .data-table td { padding: 12px 15px; border-bottom: 1px solid var(--screen); color: var(--text-muted); }
+        .data-table tr:last-child td { border-bottom: none; }
+        .data-table td.num-col { font-family: monospace; color: var(--text); letter-spacing: 0.5px; }
+
+        /* --- VISUALS --- */
+        .ci-row { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px dashed var(--screen); }
+        .ci-header { font-weight: bold; color: var(--text); font-size: 1rem; margin-bottom: 5px; }
+        .ci-sub { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; }
+        .ci-visual { height: 28px; background: rgba(255,255,255,0.05); border-radius: 6px; position: relative; width: 100%; overflow: hidden; }
+        .ci-bar { height: 100%; background: var(--bar-blue); position: absolute; left: 0; border-radius: 4px 0 0 4px; opacity: 0.8; }
+        .ci-whisker { 
+            position: absolute; height: 18px; top: 5px; border-left: 2px solid var(--bar-red); border-right: 2px solid var(--bar-red); 
+            display: flex; align-items: center; z-index: 5;
+        }
+        .ci-whisker::after { content:''; width: 100%; height: 2px; background: var(--bar-red); display: block; }
+
+        /* --- SEO SECTION --- */
+        .seo-section {
+            width: 100%; max-width: 800px; margin-top: 15px; padding: 35px;
+            background: var(--calc-body); border-radius: 16px; border: 1px solid var(--screen);
+            color: var(--text); margin-bottom: 30px; box-shadow: 0 4px 6px var(--shadow);
+        }
+        .seo-section h2 { color: var(--accent); font-size: 1.8rem; margin-bottom: 20px; border-bottom: 1px solid var(--screen); padding-bottom: 15px; }
+        .seo-section h3 { color: var(--text); font-size: 1.4rem; margin-top: 30px; margin-bottom: 15px; font-weight: 700; }
+        .seo-section p { font-size: 1.05rem; color: var(--text-muted); line-height: 1.9; margin-bottom: 15px; text-align: justify; }
+        .seo-section ul, .seo-section ol { list-style: none; padding: 0; margin-bottom: 20px; }
+        .seo-section li { margin-bottom: 12px; padding-left: 15px; border-left: 4px solid var(--accent); color: var(--text-muted); font-size: 1rem; line-height: 1.7; background: rgba(0,0,0,0.05); padding: 10px; border-radius: 0 8px 8px 0; }
+        
+        .faq-item { margin-bottom: 20px; border-bottom: 1px solid var(--screen); padding-bottom: 20px; }
+        .faq-question { font-weight: bold; color: var(--text); font-size: 1.1rem; margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; }
+        .faq-answer { color: var(--text-muted); line-height: 1.6; }
+
+        /* --- NAVIGATION & FOOTER --- */
+        .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 4000; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(4px); }
+        .overlay.active { opacity: 1; pointer-events: all; }
+        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--sidebar-bg); z-index: 5000; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 5px 0 25px var(--shadow); padding: 20px; display: flex; flex-direction: column; overflow-y: auto; }
+        .sidebar.open { transform: translateX(300px); }
+        
+        .menu-item { padding: 15px; color: var(--text-muted); border-radius: 8px; margin-bottom: 5px; cursor: pointer; display: flex; align-items: center; gap: 15px; transition: 0.2s; text-decoration: none; font-weight: 500; }
+        .menu-item:hover, .menu-item:active { background: var(--screen); color: var(--accent); transform: translateX(5px); }
+        
+        .footer-credit { margin-top: auto; text-align: center; font-size: 0.85rem; color: var(--text-muted); padding: 25px 0; width: 100%; border-top: 1px solid var(--screen); }
+        .footer-credit span { color: var(--accent); font-weight: 700; }
+        .footer-credit a { color: var(--accent); text-decoration: none; margin: 0 5px; cursor: pointer; }
+
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 12px 25px; border-radius: 30px; font-size: 15px; opacity: 0; transition: 0.3s; z-index: 7000; pointer-events: none; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .toast.show { opacity: 1; bottom: 60px; }
+
+        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); width: 90%; max-width: 340px; background: var(--modal-bg); border: 1px solid var(--screen); border-radius: 16px; padding: 25px; z-index: 6000; opacity: 0; pointer-events: none; transition: 0.2s, background 0.3s; box-shadow: 0 25px 50px rgba(0,0,0,0.6); }
+        .modal.active { opacity: 1; pointer-events: all; transform: translate(-50%, -50%) scale(1); }
+        .close-modal { position: absolute; top: 15px; right: 20px; color: var(--text-muted); font-size: 24px; cursor: pointer; }
+
+        /* Toggle Switch */
+        .switch-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--screen); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <div class="overlay" id="overlay" onclick="closeAll()"></div>
+    <div class="toast" id="toast">Calculated Successfully</div>
+
+    <div class="sidebar" id="sidebar">
+        <div style="position:absolute; top:15px; right:15px; font-size:24px; padding:10px; color:var(--text-muted); cursor:pointer;" onclick="closeAll()">&times;</div>
+        <div style="text-align: center; border-bottom: 1px solid var(--screen); padding-bottom: 20px; margin-bottom: 20px;">
+            <div style="width: 80px; height: 80px; background: linear-gradient(45deg, var(--accent), #3b82f6); border-radius: 50%; margin: 40px auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; color: white;">K</div>
+            <h2 style="color:var(--text);">Kashif</h2>
+            <p style="color: var(--accent); font-weight:bold; margin-bottom: 8px; font-size: 0.9rem;">Elite Full-Stack Architect</p>
+        </div>
+        
+        <a href="index.html" class="menu-item"><span>&#8962;</span> Home / Scientific</a>
+        <a href="standard-deviation.html" class="menu-item" style="background:var(--screen); color:var(--accent);"><span>&#963;</span> Standard Deviation</a>
+        <a href="log-calculator.html" class="menu-item"><span>log</span> Log Calculator</a>
+        <a href="exponent.html" class="menu-item"><span>^</span> Exponent Calculator</a>
+        <a href="fraction.html" class="menu-item"><span>½</span> Fraction Calculator</a>
+        <a href="percentage.html" class="menu-item"><span>%</span> Percentage Calculator</a>
+        <div class="menu-item" onclick="openSettings()"><span>&#9881;</span> Settings</div>
+        <a href="contact.html" class="menu-item"><span>&#128100;</span> Contact Developer</a>
+    </div>
+
+    <div class="modal" id="modal-settings">
+        <span class="close-modal" onclick="closeAll()">&times;</span>
+        <h3 style="color:var(--accent); text-align:center; margin-bottom:20px;">Settings</h3>
+        <div class="switch-container">
+            <span style="color:var(--text); font-weight:500;">Light Mode</span>
+            <label class="switch"><input type="checkbox" id="theme-toggle" onchange="toggleTheme()"><span class="slider"></span></label>
+        </div>
+    </div>
+
+    <header>
+        <div class="hamburger" onclick="openSidebar()">&#9776;</div>
+        <div class="brand">KASHIF<span>.PRO</span></div>
+        <div style="width: 24px;"></div>
+    </header>
+
+    <div class="main-content">
+        <div class="tool-container">
+            <h1>Standard Deviation Calculator</h1>
+            
+            <label class="input-label">Enter Data Set (separated by commas, spaces, or new lines):</label>
+            <textarea id="dataInput" placeholder="Example: 10, 12, 23, 23, 16, 23, 21, 16"></textarea>
+            
+            <div class="controls">
+                <div class="radio-group">
+                    <div class="radio-option active" id="opt-pop" onclick="setMode('pop')">Population</div>
+                    <div class="radio-option" id="opt-samp" onclick="setMode('samp')">Sample</div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="btn-action btn-calc" onclick="calculateStats()">CALCULATE</button>
+                <button class="btn-action btn-clear" onclick="clearFields()">CLEAR</button>
+            </div>
+
+            <div class="result-box" id="resultBox">
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <div class="stat-label">Standard Deviation (<span id="sd-symbol">σ</span>)</div>
+                        <div class="stat-value" id="res-sd">--</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Variance (<span id="var-symbol">σ²</span>)</div>
+                        <div class="stat-value" id="res-var">--</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Mean (μ)</div>
+                        <div class="stat-value" id="res-mean">--</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Sum (Σx)</div>
+                        <div class="stat-value" id="res-sum">--</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Count (N)</div>
+                        <div class="stat-value" id="res-count">--</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-label">Standard Error (SE)</div>
+                        <div class="stat-value" id="res-se">--</div>
+                    </div>
+                </div>
+
+                <div class="section-header">Calculation Steps</div>
+                <div class="math-display" id="step-formula">
+                    </div>
+
+                <div class="section-header">Margin of Error (Confidence Interval)</div>
+                <p class="ci-sub">Assuming a normal distribution, the following ranges represent where the true population mean likely falls:</p>
+                <div id="ci-container">
+                    </div>
+
+                <div class="section-header">Frequency Table</div>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Value</th>
+                                <th>Frequency</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody id="freq-table-body">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="section-header">Data Breakdown (Squared Differences)</div>
+                <p class="ci-sub">Step-by-step calculation of (x - Mean)² for each data point.</p>
+                <div class="table-wrapper">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Number (x)</th>
+                                <th>Diff (x - μ)</th>
+                                <th>Squared (x - μ)²</th>
+                            </tr>
+                        </thead>
+                        <tbody id="step-table-body">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="scroll-indicator" style="color:var(--accent); text-align:center; margin-bottom:20px; font-size:12px; font-weight:bold; cursor:pointer;" onclick="document.getElementById('seo-content').scrollIntoView({behavior:'smooth'})">
+            SCROLL FOR IN-DEPTH GUIDE & FAQ<br>&#8595;
+        </div>
+
+        <div class="seo-section" id="seo-content">
+            <h2>Understanding Standard Deviation: The Complete Guide</h2>
+            <p>Welcome to <strong>Kashif's Pro Standard Deviation Calculator</strong>. This tool is engineered for precision, speed, and education. Unlike generic calculators, we process data locally on your device, ensuring privacy while handling large datasets with billions of values using high-precision 64-bit floating-point logic.</p>
+
+            <h3>What is Standard Deviation?</h3>
+            <p>Standard deviation is a statistical metric that quantifies the amount of variation or dispersion in a dataset. In simple terms, it tells you how spread out your numbers are from the average (mean).</p>
+            <ul>
+                <li><strong>Low Standard Deviation:</strong> Indicates that data points are clustered closely around the mean. The curve is tall and narrow.</li>
+                <li><strong>High Standard Deviation:</strong> Indicates that data points are spread out over a wider range. The curve is flat and wide.</li>
+            </ul>
+
+            <h3>Population vs. Sample Mode</h3>
+            <p>Choosing the correct mode is critical for accurate results:</p>
+            
+            <div class="faq-item">
+                <div class="faq-question">1. When should I use Population Standard Deviation (σ)?</div>
+                <div class="faq-answer">Use this mode when your dataset represents the <strong>entire group</strong> you are interested in. For example, if a teacher analyzes the test scores of her specific class of 30 students, she has the entire population. The formula divides by <strong>N</strong>.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">2. When should I use Sample Standard Deviation (s)?</div>
+                <div class="faq-answer">Use this mode when your data is a <strong>subset</strong> of a larger group. For example, surveying 1,000 people to estimate the behavior of a country. The formula divides by <strong>N-1</strong> (Bessel's Correction) to compensate for the bias inherent in sampling.</div>
+            </div>
+
+            <h3>Frequently Asked Questions (FAQ)</h3>
+
+            <div class="faq-item">
+                <div class="faq-question">What is Variance and how does it differ from Standard Deviation?</div>
+                <div class="faq-answer">Variance is simply the standard deviation squared (σ²). While standard deviation is expressed in the same units as the data (e.g., meters), variance is expressed in squared units (e.g., square meters). Variance is useful for mathematical proofs and advanced statistical modeling like ANOVA.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">How does the calculator handle billions of numbers?</div>
+                <div class="faq-answer">Our algorithm uses optimized JavaScript processing. For extremely large inputs (values in the billions), we utilize double-precision floating-point arithmetic. If the numbers exceed standard display limits, we automatically format them into scientific notation to maintain layout integrity without losing calculation precision.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">What is the "Margin of Error" shown in the results?</div>
+                <div class="faq-answer">The Margin of Error, derived from the Standard Error of the Mean (SEM), creates a Confidence Interval. For example, a "95% Confidence Interval" means that if you were to repeat your experiment 100 times, the true population mean would likely fall within this calculated range 95 times.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can Standard Deviation be negative?</div>
+                <div class="faq-answer">No. Standard deviation represents a distance (dispersion) and is calculated using the square root of a squared number. It can be zero (if all numbers are identical) or positive, but never negative.</div>
+            </div>
+        </div>
+        
+        <div class="footer-credit">
+            Architected & Engineered by <span>Kashif Dawar</span> | <a href="index.html">Home</a> | <a href="contact.html">Contact Us</a> | <a href="privacy.html">Privacy Policy</a>
+        </div>
+    </div>
+
+    <script>
+        // --- STATE & CONFIG ---
+        let calcMode = 'pop'; // 'pop' or 'samp'
+        const themeToggle = document.getElementById('theme-toggle');
+        const resultBox = document.getElementById('resultBox');
+
+        // --- INIT ---
+        window.onload = function() {
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.add('light-mode');
+                themeToggle.checked = true;
+            }
+        };
+
+        // --- UI ACTIONS ---
+        function toggleTheme() {
+            if (themeToggle.checked) {
+                document.body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('overlay').classList.add('active'); }
+        function openSettings() { closeAll(); setTimeout(() => { document.getElementById('modal-settings').classList.add('active'); document.getElementById('overlay').classList.add('active'); }, 200); }
+        function closeAll() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('active');
+            document.getElementById('modal-settings').classList.remove('active');
+        }
+
+        function setMode(mode) {
+            calcMode = mode;
+            document.getElementById('opt-pop').classList.remove('active');
+            document.getElementById('opt-samp').classList.remove('active');
+            document.getElementById('opt-' + mode).classList.add('active');
+            
+            // Update symbols
+            document.getElementById('sd-symbol').innerText = mode === 'pop' ? 'σ' : 's';
+            document.getElementById('var-symbol').innerText = mode === 'pop' ? 'σ²' : 's²';
+            
+            if(document.getElementById('dataInput').value.trim() !== "") calculateStats();
+        }
+
+        function clearFields() {
+            document.getElementById('dataInput').value = "";
+            resultBox.classList.remove('show');
+            showToast("Fields Cleared");
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // --- HIGH PRECISION FORMATTING ---
+        function formatNum(num) {
+            // Handle extremely large or small numbers with scientific notation
+            if(Math.abs(num) > 1e14 || (Math.abs(num) < 1e-6 && num !== 0)) {
+                return num.toExponential(6);
+            }
+            // Use maximumFractionDigits to handle integers cleanly but decimals precisely
+            return num.toLocaleString('en-US', { maximumFractionDigits: 10 });
+        }
+
+        function calculateStats() {
+            const inputStr = document.getElementById('dataInput').value;
+            // Robust parsing: handles mix of commas, spaces, tabs, newlines
+            const rawData = inputStr.split(/[\s,]+/);
+            
+            let data = [];
+            for(let item of rawData) {
+                // Remove empty strings and validate number
+                if(item.trim() !== "" && !isNaN(item)) {
+                    data.push(parseFloat(item));
+                }
+            }
+
+            if (data.length === 0) { showToast("Please enter numbers"); return; }
+            if (calcMode === 'samp' && data.length < 2) { showToast("Sample needs > 1 number"); return; }
+
+            const n = data.length;
+            // High-precision Sum
+            const sum = data.reduce((a, b) => a + b, 0);
+            const mean = sum / n;
+
+            // Frequency Calc
+            const freqMap = {};
+            data.forEach(num => { freqMap[num] = (freqMap[num] || 0) + 1; });
+            const sortedUnique = Object.keys(freqMap).map(Number).sort((a,b) => a - b);
+
+            // Deviations & Variance
+            let sumSqDiff = 0;
+            let stepTableHtml = "";
+            
+            // Generate Data Breakdown Table (Limit visual rows to 50 for performance)
+            data.forEach((val, i) => {
+                const diff = val - mean;
+                const sqDiff = diff * diff;
+                sumSqDiff += sqDiff;
+
+                if(i < 50) {
+                    stepTableHtml += `<tr>
+                        <td class="num-col">${formatNum(val)}</td>
+                        <td class="num-col" style="color:${diff < 0 ? 'var(--danger)' : 'var(--text)'}">${formatNum(diff)}</td>
+                        <td class="num-col">${formatNum(sqDiff)}</td>
+                    </tr>`;
+                }
+            });
+            if(n > 50) stepTableHtml += `<tr><td colspan="3" style="text-align:center">... (${n-50} more rows hidden for performance) ...</td></tr>`;
+
+            const divisor = (calcMode === 'pop') ? n : (n - 1);
+            const variance = sumSqDiff / divisor;
+            const stdDev = Math.sqrt(variance);
+            const sem = stdDev / Math.sqrt(n);
+
+            // --- RENDER RESULTS ---
+            document.getElementById('res-mean').innerText = formatNum(mean);
+            document.getElementById('res-count').innerText = n;
+            document.getElementById('res-sum').innerText = formatNum(sum);
+            document.getElementById('res-sd').innerText = formatNum(stdDev);
+            document.getElementById('res-var').innerText = formatNum(variance);
+            document.getElementById('res-se').innerText = formatNum(sem);
+            
+            document.getElementById('step-table-body').innerHTML = stepTableHtml;
+
+            // --- MATH STEP DISPLAY ---
+            const meanSymbol = (calcMode === 'pop') ? 'μ' : 'x̄';
+            const sdSymbol = (calcMode === 'pop') ? 'σ' : 's';
+            
+            // Dynamic equation string
+            let eqHtml = `
+            ${sdSymbol} = &radic; [ &Sigma;(x<sub>i</sub> - ${meanSymbol})&sup2; / ${calcMode === 'pop' ? 'N' : 'N-1'} ]<br><br>
+            ${sdSymbol}&sup2; = [ (${formatNum(data[0])} - ${formatNum(mean)})&sup2; + ... ] / ${divisor}<br><br>
+            ${sdSymbol}&sup2; = ${formatNum(sumSqDiff)} / ${divisor}<br><br>
+            ${sdSymbol}&sup2; = ${formatNum(variance)}<br><br>
+            ${sdSymbol} = &radic;${formatNum(variance)} = <strong>${formatNum(stdDev)}</strong>
+            `;
+            document.getElementById('step-formula').innerHTML = eqHtml;
+
+            // --- CONFIDENCE INTERVALS ---
+            const zScores = [
+                { level: "68.3%", z: 1.0 },
+                { level: "90%", z: 1.645 },
+                { level: "95%", z: 1.960 },
+                { level: "99%", z: 2.576 },
+                { level: "99.9%", z: 3.291 }
+            ];
+
+            let ciHtml = "";
+            zScores.forEach(item => {
+                const margin = item.z * sem;
+                const pct = (margin / mean) * 100;
+                
+                // Visual width calculation
+                const maxZ = 4.0; 
+                const whiskerWidth = (item.z / maxZ) * 60; // Max 60% width
+
+                ciHtml += `
+                <div class="ci-row">
+                    <div class="ci-header">${item.level} Confidence Level, ${item.z}${sdSymbol}<sub>x̄</sub></div>
+                    <div class="ci-sub">Margin of Error: ${formatNum(mean)} &plusmn;${formatNum(margin)} (${isNaN(pct) ? '0' : Math.abs(pct).toFixed(2)}%)</div>
+                    <div class="ci-visual">
+                        <div class="ci-bar" style="width: 40%;"></div>
+                        <div class="ci-whisker" style="width: ${whiskerWidth}%; left: 40%;"></div>
+                    </div>
+                </div>`;
+            });
+            document.getElementById('ci-container').innerHTML = ciHtml;
+
+            // --- FREQUENCY TABLE ---
+            let freqHtml = "";
+            sortedUnique.forEach(val => {
+                const count = freqMap[val];
+                const percent = (count / n) * 100;
+                freqHtml += `<tr>
+                    <td>${formatNum(val)}</td>
+                    <td>${count}</td>
+                    <td>(${percent.toFixed(2)}%)</td>
+                </tr>`;
+            });
+            document.getElementById('freq-table-body').innerHTML = freqHtml;
+
+            resultBox.classList.add('show');
+            showToast("Calculated Successfully");
+        }
+    </script>
+</body>
+</html>
