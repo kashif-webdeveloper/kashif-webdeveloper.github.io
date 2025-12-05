@@ -203,7 +203,7 @@
             .input-group select { padding: 12px 2px; font-size: 14px; min-width: 60px; }
         }
 
-        /* Overlay & Sidebar (Standard) */
+        /* Overlay & Sidebar */
         .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 4000; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(2px); }
         .overlay.active { opacity: 1; pointer-events: all; }
         .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--sidebar-bg); z-index: 5000; transition: transform 0.3s ease, background 0.3s; box-shadow: 5px 0 20px var(--shadow); padding: 20px; display: flex; flex-direction: column; overflow-y: auto; }
@@ -213,9 +213,13 @@
         .menu-item { padding: 15px; color: var(--text-muted); border-radius: 8px; margin-bottom: 5px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; position: relative; z-index: 5001; text-decoration: none; font-size: 16px; }
         .menu-item:hover, .menu-item:active { background: var(--screen); color: var(--accent); }
         
-        /* Modal */
+        /* Modals */
         .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); width: 85%; max-width: 320px; background: var(--modal-bg); border: 1px solid var(--screen); border-radius: 16px; padding: 20px; z-index: 6000; opacity: 0; pointer-events: none; transition: 0.2s, background 0.3s; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
         .modal.active { opacity: 1; pointer-events: all; transform: translate(-50%, -50%) scale(1); }
+        .modal h3 { margin-bottom: 15px; color: var(--accent); text-align: center; }
+        .input-group-modal { margin-bottom: 15px; }
+        .input-group-modal label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
+        .input-group-modal input { width: 100%; padding: 10px; background: var(--bg-dark); border: 1px solid var(--screen); color: var(--text); border-radius: 6px; }
         .switch-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
         .switch input { opacity: 0; width: 0; height: 0; }
@@ -236,23 +240,44 @@
 
     <div class="sidebar" id="sidebar">
         <div style="position:absolute; top:15px; right:15px; font-size:24px; padding:10px; color:var(--text-muted); cursor:pointer;" onclick="closeAll()">&times;</div>
+        
         <div class="profile">
             <div class="avatar">K</div>
             <h2 style="color:var(--text);">Kashif</h2>
             <p style="color: var(--accent); font-weight:bold; margin-bottom: 8px; font-size: 0.9rem;">Elite Full-Stack Architect</p>
+            <p style="color: var(--text-muted); font-size: 0.8rem;">Innovative developer creating seamless solutions.</p>
         </div>
         
         <a href="index.html" class="menu-item" onclick="closeAll()"><span>&#8962;</span> Home</a>
+        <a href="index.html" class="menu-item" onclick="closeAll()"><span>&#8730;</span> Scientific Mode</a>
+        
+        <a href="standard-deviation.html" class="menu-item" onclick="closeAll()"><span>&#963;</span> Standard Deviation</a>
+        
         <a href="log-calculator.html" class="menu-item" onclick="closeAll()"><span>log</span> Log Calculator</a>
         
-        <div class="menu-item" style="background: var(--screen); color: var(--accent); font-weight: bold;"><span>$</span> Mortgage Calculator</div>
-
         <a href="exponent.html" class="menu-item" onclick="closeAll()"><span>^</span> Exponent Calculator</a>
+        
         <a href="fraction.html" class="menu-item" onclick="closeAll()"><span>½</span> Fraction Calculator</a>
+        
         <a href="percentage.html" class="menu-item" onclick="closeAll()"><span>%</span> Percentage Calculator</a>
         
-        <div class="menu-item" onclick="openSettings()"><span>&#9881;</span> Settings</div>
+        <a href="bmi-calculator.html" class="menu-item" onclick="closeAll()"><span>&#9878;</span> BMI Calculator</a>
+        
+        <div class="menu-item" style="background: var(--screen); color: var(--accent);" onclick="closeAll()"><span>&#127969;</span> Mortgage Calculator</div>
+        
+        <div class="menu-item" onclick="handleNav('settings')"><span>&#9881;</span> Settings</div>
+        
         <a href="contact.html" class="menu-item" onclick="closeAll()"><span>&#128100;</span> Contact Developer</a>
+        
+        <div class="menu-item" onclick="handleNav('signin')" style="margin-top:auto; background:var(--accent); color:white; justify-content: center; font-weight:bold;">Sign In</div>
+    </div>
+
+    <div class="modal" id="modal-signin">
+        <span class="close-modal" onclick="closeAll()">&times;</span>
+        <h3>Sign In</h3>
+        <div class="input-group-modal"><label>Email</label><input type="email" placeholder="Enter email"></div>
+        <div class="input-group-modal"><label>Password</label><input type="password" placeholder="Enter password"></div>
+        <button class="modal-btn" onclick="showToast('Welcome back, Kashif!'); closeAll()">Login</button>
     </div>
 
     <div class="modal" id="modal-settings">
@@ -262,12 +287,16 @@
             <span class="switch-label">Light Mode</span>
             <label class="switch"><input type="checkbox" id="theme-toggle" onchange="toggleTheme()"><span class="slider"></span></label>
         </div>
+        <div class="switch-container">
+            <span class="switch-label">Button Sounds</span>
+            <label class="switch"><input type="checkbox" id="sound-toggle" onchange="saveSoundPref()"><span class="slider"></span></label>
+        </div>
         <button class="modal-btn" onclick="showToast('Preferences Saved'); closeAll()">Done</button>
     </div>
 
     <header>
         <div class="hamburger" onclick="openSidebar()">&#9776;</div>
-        <div class="brand">CALCULATOR<span>.NET</span></div>
+        <div class="brand">KASHIF <span>PRO</span></div>
         <div style="width: 24px;"></div>
     </header>
 
@@ -593,25 +622,19 @@
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
         const themeToggle = document.getElementById('theme-toggle');
-        
+        const soundToggle = document.getElementById('sound-toggle');
+
         window.onload = function() {
             if (localStorage.getItem('theme') === 'light') { 
                 document.body.classList.add('light-mode'); 
-                themeToggle.checked = true; 
+                if(themeToggle) themeToggle.checked = true; 
+            }
+            if (localStorage.getItem('sound') === 'on') { 
+                if(soundToggle) soundToggle.checked = true; 
             }
             populateDateDropdowns();
             calculateMortgage(); // Auto Calculate on Load
         };
-
-        function toggleTheme() {
-            if (themeToggle.checked) { 
-                document.body.classList.add('light-mode'); 
-                localStorage.setItem('theme', 'light'); 
-            } else { 
-                document.body.classList.remove('light-mode'); 
-                localStorage.setItem('theme', 'dark'); 
-            }
-        }
 
         function populateDateDropdowns() {
             const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -629,31 +652,45 @@
             });
         }
 
-        // --- NAVIGATION & UTILS ---
+        // --- NAVIGATION HANDLERS ---
         function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('active'); }
+        
         function closeAll() {
             sidebar.classList.remove('open');
             overlay.classList.remove('active');
+            document.getElementById('modal-signin').classList.remove('active');
             document.getElementById('modal-settings').classList.remove('active');
         }
-        function openSettings() {
-            closeAll();
-            setTimeout(() => { 
-                document.getElementById('modal-settings').classList.add('active'); 
-                overlay.classList.add('active'); 
-            }, 300);
+
+        function handleNav(action) {
+            if (action === 'settings') {
+                closeAll();
+                setTimeout(() => { document.getElementById('modal-settings').classList.add('active'); overlay.classList.add('active'); }, 300);
+            }
+            else if (action === 'signin') {
+                closeAll();
+                setTimeout(() => { document.getElementById('modal-signin').classList.add('active'); overlay.classList.add('active'); }, 300);
+            }
         }
+
         function showToast(msg) {
             const toast = document.getElementById('toast'); 
             toast.innerText = msg; 
             toast.classList.add('show');
             setTimeout(() => toast.classList.remove('show'), 3000);
         }
+
+        // --- SETTINGS LOGIC ---
+        function toggleTheme() {
+            if (themeToggle.checked) { document.body.classList.add('light-mode'); localStorage.setItem('theme', 'light'); }
+            else { document.body.classList.remove('light-mode'); localStorage.setItem('theme', 'dark'); }
+        }
+        function saveSoundPref() { localStorage.setItem('sound', soundToggle.checked ? 'on' : 'off'); }
         
+        // --- CALCULATOR HELPER ---
         function toggleSection(id) {
             const section = document.getElementById(id);
             const toggle = document.querySelector(`[onclick="toggleSection('${id}')"]`);
-            
             if (section.style.display === 'none' || !section.style.display) {
                 section.style.display = 'block';
                 if(toggle) toggle.innerText = toggle.innerText.replace('+','-').replace('More','Fewer');
@@ -662,26 +699,19 @@
                 if(toggle) toggle.innerText = toggle.innerText.replace('-','+').replace('Fewer','More');
             }
         }
-
         function formatMoney(amount) {
             return '$' + (Math.round(amount * 100) / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
-        
         function getFloat(id) { return parseFloat(document.getElementById(id).value) || 0; }
         function getInt(id) { return parseInt(document.getElementById(id).value) || 0; }
 
         // --- CALCULATION LOGIC ---
-
         function calculateMortgage() {
-            // 1. Inputs
             const homePrice = getFloat('home-price');
             const downUnit = document.getElementById('down-payment-unit').value;
             let downPayment = getFloat('down-payment-val');
             
-            // Normalize Down Payment
-            if (downUnit === 'percent') {
-                downPayment = homePrice * (downPayment / 100);
-            }
+            if (downUnit === 'percent') { downPayment = homePrice * (downPayment / 100); }
             
             const loanAmount = homePrice - downPayment;
             const termYears = getFloat('loan-term');
@@ -689,62 +719,47 @@
             const startMonth = getInt('start-month');
             const startYear = getInt('start-year');
             
-            if (homePrice <= 0 || termYears <= 0) {
-                return; // Silently fail or use defaults
-            }
+            if (homePrice <= 0 || termYears <= 0) return;
 
-            // 2. Parse Costs (Convert all to Monthly Dollar Amounts or initial annuals)
             const includeTax = document.getElementById('include-tax-check').checked;
-            
             let propTax = 0, homeIns = 0, pmi = 0, hoa = 0, other = 0;
-            // Get Units for Increases
             let incTaxVal = getFloat('inc-tax');
             let incInsVal = getFloat('inc-ins');
             let incHoaVal = getFloat('inc-hoa');
             let incOtherVal = getFloat('inc-other');
-            
             let incTaxUnit = document.getElementById('inc-tax-unit').value;
             let incInsUnit = document.getElementById('inc-ins-unit').value;
             let incHoaUnit = document.getElementById('inc-hoa-unit').value;
             let incOtherUnit = document.getElementById('inc-other-unit').value;
 
             if (includeTax) {
-                // Helper to get annual dollar value
                 const getVal = (idBase) => {
                     const val = getFloat(idBase + '-val');
                     const unit = document.getElementById(idBase + '-unit').value;
                     return (unit === 'percent') ? homePrice * (val / 100) : val;
                 };
-
-                propTax = getVal('prop-tax') / 12; // Monthly
-                homeIns = getVal('home-ins') / 12; // Monthly
-                pmi = getVal('pmi') / 12;          // Monthly
-                other = getVal('other-cost') / 12; // Monthly
-                hoa = getFloat('hoa-val');         // Already Monthly
+                propTax = getVal('prop-tax') / 12;
+                homeIns = getVal('home-ins') / 12;
+                pmi = getVal('pmi') / 12;
+                other = getVal('other-cost') / 12;
+                hoa = getFloat('hoa-val');
             }
 
-            // 3. Extra Payments Setup (with new Unit logic)
-            // Extra Monthly
             const exMonthlyVal = getFloat('extra-monthly-val');
             const exMonthlyUnit = document.getElementById('extra-monthly-unit').value;
             const exMonthlyStart = new Date(getInt('extra-monthly-year'), getInt('extra-monthly-month') - 1).getTime();
             
-            // Extra Yearly
             const exYearlyVal = getFloat('extra-yearly-val');
             const exYearlyUnit = document.getElementById('extra-yearly-unit').value;
             const exYearlyStart = new Date(getInt('extra-yearly-year'), getInt('extra-yearly-month') - 1).getTime();
             
-            // Extra One Time
             const exOneTimeVal = getFloat('extra-onetime-val');
             const exOneTimeUnit = document.getElementById('extra-onetime-unit').value;
             const exOneTimeDate = new Date(getInt('extra-onetime-year'), getInt('extra-onetime-month') - 1).getTime();
 
-            // 4. Amortization Simulation
             let balance = loanAmount;
             let monthRate = (annualRate / 100) / 12;
             let totalMonths = termYears * 12;
-            
-            // Calculate Base P&I
             let monthlyPI = 0;
             if (annualRate === 0) monthlyPI = loanAmount / totalMonths;
             else {
@@ -752,21 +767,14 @@
                 monthlyPI = (loanAmount * x * monthRate) / (x - 1);
             }
             
-            // --- Helper for Extra Payment Amounts ---
-            // Monthly % is based on Monthly P&I
             const getMonthlyExtra = () => (exMonthlyUnit === 'dollar') ? exMonthlyVal : (monthlyPI * exMonthlyVal / 100);
-            
-            // Yearly/OneTime % is based on Original Loan Amount (Standard behavior)
             const getYearlyExtra = () => (exYearlyUnit === 'dollar') ? exYearlyVal : (loanAmount * exYearlyVal / 100);
             const getOneTimeExtra = () => (exOneTimeUnit === 'dollar') ? exOneTimeVal : (loanAmount * exOneTimeVal / 100);
 
-
             let totalInterest = 0;
-            let totalPaid = 0; // Only P&I + Extra
-            let currentDisplayDate = new Date(startYear, startMonth - 1);
+            let totalPaid = 0;
             let payoffDateStr = "";
 
-            // Costs for initial display
             const initialMonthlyCost = monthlyPI + propTax + homeIns + pmi + hoa + other;
             document.getElementById('res-total-monthly').innerText = formatMoney(initialMonthlyCost);
             document.getElementById('res-pi').innerText = formatMoney(monthlyPI);
@@ -774,67 +782,34 @@
             document.getElementById('res-ins').innerText = formatMoney(homeIns);
             document.getElementById('res-fees').innerText = formatMoney(pmi + hoa + other);
 
-            // Simulation Loop
             let actualMonths = 0;
             let loopBalance = loanAmount;
-            
-            // Dynamic cost trackers
             let currTax = propTax;
             let currIns = homeIns;
             let currHoa = hoa;
             let currOther = other;
 
-            // Safety break 60 years
             for (let m = 0; m < 720; m++) {
                 if (loopBalance <= 0) break;
-
                 let currentDate = new Date(startYear, startMonth - 1 + m);
                 let currentTime = currentDate.getTime();
 
-                // Apply Increase every 12 months (Jan)
                 if (m > 0 && m % 12 === 0) {
-                    // Property Tax Logic
-                    if(incTaxUnit === 'percent') currTax *= (1 + incTaxVal / 100);
-                    else currTax += (incTaxVal / 12); // Add annual fixed dollar increase converted to monthly
-
-                    // Home Ins Logic
-                    if(incInsUnit === 'percent') currIns *= (1 + incInsVal / 100);
-                    else currIns += (incInsVal / 12);
-
-                    // HOA Logic
-                    if(incHoaUnit === 'percent') currHoa *= (1 + incHoaVal / 100);
-                    else currHoa += (incHoaVal); // HOA is already monthly input, if user meant annual $ increase, divide by 12?
-                    // Assuming HOA input was monthly, a fixed $ increase usually means "Fees go up by $10/month".
-                    // Let's assume input for HOA increase in $ is a monthly increase.
-                    
-                    // Other Costs Logic
-                    if(incOtherUnit === 'percent') currOther *= (1 + incOtherVal / 100);
-                    else currOther += (incOtherVal / 12);
+                    if(incTaxUnit === 'percent') currTax *= (1 + incTaxVal / 100); else currTax += (incTaxVal / 12);
+                    if(incInsUnit === 'percent') currIns *= (1 + incInsVal / 100); else currIns += (incInsVal / 12);
+                    if(incHoaUnit === 'percent') currHoa *= (1 + incHoaVal / 100); else currHoa += (incHoaVal);
+                    if(incOtherUnit === 'percent') currOther *= (1 + incOtherVal / 100); else currOther += (incOtherVal / 12);
                 }
 
-                // Interest
                 let interestPayment = loopBalance * monthRate;
                 let principalPayment = monthlyPI - interestPayment;
                 
-                // Add Extra Payments
                 let extra = 0;
                 if (currentTime >= exMonthlyStart) extra += getMonthlyExtra();
-                
-                // Check exact month for yearly (comparing month index)
-                if (currentTime >= exYearlyStart && currentDate.getMonth() === new Date(exYearlyStart).getMonth()) {
-                     extra += getYearlyExtra();
-                }
-                
-                // Check exact month/year for One Time
-                if (currentDate.getMonth() === new Date(exOneTimeDate).getMonth() && 
-                    currentDate.getFullYear() === new Date(exOneTimeDate).getFullYear()) {
-                    extra += getOneTimeExtra();
-                }
+                if (currentTime >= exYearlyStart && currentDate.getMonth() === new Date(exYearlyStart).getMonth()) { extra += getYearlyExtra(); }
+                if (currentDate.getMonth() === new Date(exOneTimeDate).getMonth() && currentDate.getFullYear() === new Date(exOneTimeDate).getFullYear()) { extra += getOneTimeExtra(); }
 
-                if (principalPayment + extra > loopBalance) {
-                    principalPayment = loopBalance;
-                    extra = 0; // Consumed by principal logic
-                }
+                if (principalPayment + extra > loopBalance) { principalPayment = loopBalance; extra = 0; }
 
                 loopBalance -= (principalPayment + extra);
                 totalInterest += interestPayment;
@@ -842,7 +817,6 @@
                 actualMonths++;
             }
 
-            // Set Dates
             let finalDate = new Date(startYear, startMonth - 1 + actualMonths);
             payoffDateStr = finalDate.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 
@@ -850,7 +824,6 @@
             document.getElementById('res-total-paid').innerText = formatMoney(totalPaid);
             document.getElementById('res-date').innerText = payoffDateStr;
 
-            // 5. Bi-Weekly Calc (Simplified Simulation)
             const biCheck = document.getElementById('biweekly-check').checked;
             const biBox = document.getElementById('biweekly-results');
             
@@ -859,12 +832,8 @@
                 let biPayment = monthlyPI / 2;
                 document.getElementById('res-bi-amt').innerText = formatMoney(biPayment) + " / 2 weeks";
                 
-                // Run mini sim for biweekly (26 payments a year)
-                // Approx: payment happens every 14 days. 
-                // We will approximate by doing monthly logic but with (monthlyPI * 13/12) as payment
-                
                 let biBalance = loanAmount;
-                let effectiveMonthly = monthlyPI * (13/12); // The math equivalent
+                let effectiveMonthly = monthlyPI * (13/12);
                 let biMonths = 0;
                 let biTotalInt = 0;
 
@@ -883,10 +852,7 @@
             } else {
                 biBox.style.display = 'none';
             }
-            
-            showToast('Calculated Successfully');
         }
-
     </script>
 </body>
 </html>

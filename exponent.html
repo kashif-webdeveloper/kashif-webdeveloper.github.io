@@ -36,8 +36,10 @@
             --equals: #3b82f6;
             --danger: #ef4444;
             --sidebar-bg: #1e293b;
+            --modal-bg: #1e293b;
             --shadow: rgba(0,0,0,0.5);
             --success: #22c55e;
+            --card-bg: #334155;
         }
 
         body.light-mode {
@@ -53,7 +55,9 @@
             --equals: #2563eb;
             --danger: #dc2626;
             --sidebar-bg: #ffffff;
+            --modal-bg: #ffffff;
             --shadow: rgba(0,0,0,0.15);
+            --card-bg: #f8fafc;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Roboto, sans-serif; touch-action: manipulation; }
@@ -137,40 +141,107 @@
         .seo-section li { margin-bottom: 12px; padding-left: 15px; border-left: 3px solid var(--accent); color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; }
         .math-block { background: var(--screen); padding: 10px; border-radius: 6px; font-family: monospace; color: var(--accent); display: block; margin: 10px 0; text-align: center; font-size: 1.1rem; }
 
-        /* --- SIDEBAR --- */
-        .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 4000; opacity: 0; pointer-events: none; transition: 0.3s; }
+        /* --- SIDEBAR & OVERLAY --- */
+        .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 4000; opacity: 0; pointer-events: none; transition: opacity 0.3s; backdrop-filter: blur(2px); }
         .overlay.active { opacity: 1; pointer-events: all; }
-        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--sidebar-bg); z-index: 5000; transition: transform 0.3s ease; padding: 20px; display: flex; flex-direction: column; box-shadow: 5px 0 20px var(--shadow); }
+
+        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--sidebar-bg); z-index: 5000; transition: transform 0.3s ease, background 0.3s; box-shadow: 5px 0 20px var(--shadow); padding: 20px; display: flex; flex-direction: column; overflow-y: auto; }
         .sidebar.open { transform: translateX(300px); }
-        .menu-item { padding: 15px; color: var(--text-muted); border-radius: 8px; margin-bottom: 5px; cursor: pointer; display: flex; align-items: center; gap: 10px; text-decoration: none; transition: 0.2s; }
-        .menu-item:hover { background: var(--screen); color: var(--accent); }
+
+        .profile { text-align: center; border-bottom: 1px solid var(--screen); padding-bottom: 20px; margin-bottom: 20px; }
+        .avatar { width: 80px; height: 80px; background: linear-gradient(45deg, var(--accent), #3b82f6); border-radius: 50%; margin: 40px auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; color: white; }
+        .menu-item { padding: 15px; color: var(--text-muted); border-radius: 8px; margin-bottom: 5px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; position: relative; z-index: 5001; text-decoration: none; }
+        .menu-item:hover, .menu-item:active { background: var(--screen); color: var(--accent); }
+
+        /* --- MODALS (FIX FOR SETTINGS & SIGN IN) --- */
+        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); width: 85%; max-width: 320px; background: var(--modal-bg); border: 1px solid var(--screen); border-radius: 16px; padding: 20px; z-index: 6000; opacity: 0; pointer-events: none; transition: 0.2s, background 0.3s; box-shadow: 0 20px 50px rgba(0,0,0,0.6); max-height: 90vh; overflow-y: auto; }
+        .modal.active { opacity: 1; pointer-events: all; transform: translate(-50%, -50%) scale(1); }
+        .modal h3 { margin-bottom: 15px; color: var(--accent); text-align: center; }
+        .modal-btn { width: 100%; background: var(--accent); color: white; font-weight: bold; padding: 12px; border-radius: 6px; margin-top: 10px; display: block; text-align: center; text-decoration: none; border: none; cursor: pointer; }
+        .close-modal { position: absolute; top: 10px; right: 15px; color: var(--text-muted); font-size: 24px; cursor: pointer; }
+
+        /* --- SWITCHES (FOR SETTINGS) --- */
+        .switch-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 10px; }
+        .switch-label { color: var(--text); font-weight: 500; }
+        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--screen); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 10px 20px; border-radius: 30px; font-size: 14px; opacity: 0; transition: 0.3s; z-index: 7000; pointer-events: none; }
+        .toast.show { opacity: 1; bottom: 50px; }
 
         /* Footer */
         .footer-credit { margin-top: auto; text-align: center; font-size: 0.8rem; color: var(--text-muted); padding: 20px 0; width: 100%; border-top: 1px solid var(--screen); }
-        .footer-credit a { color: var(--accent); text-decoration: none; margin: 0 5px; }
+        .footer-credit span { color: var(--accent); font-weight: 700; }
+        .footer-credit a { color: var(--accent); text-decoration: none; margin: 0 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+    <div class="overlay" id="overlay" onclick="closeAll()"></div>
+    <div class="toast" id="toast">Action Successful</div>
 
     <div class="sidebar" id="sidebar">
-        <div style="position:absolute; top:15px; right:15px; font-size:24px; padding:10px; cursor:pointer;" onclick="closeSidebar()">&times;</div>
-        <div style="text-align: center; margin-bottom: 20px; border-bottom: 1px solid var(--screen); padding-bottom: 20px;">
+        <div style="position:absolute; top:15px; right:15px; font-size:24px; padding:10px; color:var(--text-muted); cursor:pointer;" onclick="closeAll()">&times;</div>
+        
+        <div class="profile">
+            <div class="avatar">K</div>
             <h2 style="color:var(--text);">Kashif</h2>
-            <p style="color: var(--accent); font-size: 0.9rem; font-weight:bold;">Elite Tools</p>
+            <p style="color: var(--accent); font-weight:bold; margin-bottom: 8px; font-size: 0.9rem;">Elite Full-Stack Architect</p>
+            <p style="color: var(--text-muted); font-size: 0.8rem;">Innovative developer creating seamless solutions.</p>
         </div>
         
-        <a href="index.html" class="menu-item"><span>&#8962;</span> Home / Scientific</a>
-        <div class="menu-item" style="background: var(--screen); color: var(--accent);"><span>^</span> Exponent Calculator</div>
-        <a href="fraction.html" class="menu-item"><span>½</span> Fraction Calculator</a>
-        <a href="percentage.html" class="menu-item"><span>%</span> Percentage Calculator</a>
-        <a href="contact.html" class="menu-item"><span>&#128100;</span> Contact</a>
+        <a href="index.html" class="menu-item" onclick="closeAll()"><span>&#8962;</span> Home</a>
+        <a href="index.html" class="menu-item" onclick="closeAll()"><span>&#8730;</span> Scientific Mode</a>
+        
+        <a href="standard-deviation.html" class="menu-item" onclick="closeAll()"><span>&#963;</span> Standard Deviation</a>
+        
+        <a href="log-calculator.html" class="menu-item" onclick="closeAll()"><span>log</span> Log Calculator</a>
+        
+        <div class="menu-item" style="background: var(--screen); color: var(--accent);" onclick="closeAll()"><span>^</span> Exponent Calculator</div>
+        
+        <a href="fraction.html" class="menu-item" onclick="closeAll()"><span>½</span> Fraction Calculator</a>
+        <a href="percentage.html" class="menu-item" onclick="closeAll()"><span>%</span> Percentage Calculator</a>
+        
+        <a href="bmi-calculator.html" class="menu-item" onclick="closeAll()"><span>&#9878;</span> BMI Calculator</a>
+        
+        <a href="mortgage-calculator.html" class="menu-item" onclick="closeAll()"><span>&#127969;</span> Mortgage Calculator</a>
+        
+        <div class="menu-item" onclick="handleNav('settings')"><span>&#9881;</span> Settings</div>
+        
+        <a href="contact.html" class="menu-item" onclick="closeAll()"><span>&#128100;</span> Contact Developer</a>
+        
+        <div class="menu-item" onclick="handleNav('signin')" style="margin-top:auto; background:var(--accent); color:white; justify-content: center; font-weight:bold;">Sign In</div>
+    </div>
+
+    <div class="modal" id="modal-signin">
+        <span class="close-modal" onclick="closeAll()">&times;</span>
+        <h3>Sign In</h3>
+        <div class="input-group"><label>Email</label><input type="email" placeholder="Enter email"></div>
+        <div class="input-group"><label>Password</label><input type="password" placeholder="Enter password"></div>
+        <button class="modal-btn" onclick="showToast('Welcome back, Kashif!'); closeAll()">Login</button>
+    </div>
+
+    <div class="modal" id="modal-settings">
+        <span class="close-modal" onclick="closeAll()">&times;</span>
+        <h3>Settings</h3>
+        <div class="switch-container">
+            <span class="switch-label">Light Mode</span>
+            <label class="switch"><input type="checkbox" id="theme-toggle" onchange="toggleTheme()"><span class="slider"></span></label>
+        </div>
+        <div class="switch-container">
+            <span class="switch-label">Button Sounds</span>
+            <label class="switch"><input type="checkbox" id="sound-toggle" onchange="saveSoundPref()"><span class="slider"></span></label>
+        </div>
+        <button class="modal-btn" onclick="showToast('Preferences Saved'); closeAll()">Done</button>
     </div>
 
     <header>
         <div class="hamburger" onclick="openSidebar()">&#9776;</div>
-        <div class="brand">EXPONENT<span>.CALC</span></div>
+        <div class="brand">KASHIF <span>PRO</span></div>
         <div style="width: 24px;"></div>
     </header>
 
@@ -253,28 +324,63 @@
         </div>
 
         <div class="footer-credit">
-            © 2025 Kashif's Tools | <a href="index.html">Home</a> | <a href="terms.html">Terms</a> | <a href="privacy.html">Privacy</a>
+            Architected & Engineered by <span>Kashif Dawar</span> | <a href="index.html">Home</a> | <a href="contact.html">Contact Us</a> | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Use</a>
         </div>
     </div>
 
     <script>
-        // --- HIGH TECH LOGIC SCRIPT ---
-        
-        // Check Theme
-        if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); }
-
+        // --- CONFIG & STATE MANAGEMENT ---
         const sidebar = document.getElementById('sidebar');
         const overlay = document.getElementById('overlay');
+        const themeToggle = document.getElementById('theme-toggle');
+        const soundToggle = document.getElementById('sound-toggle');
+        
+        // Load Preferences
+        window.onload = function() {
+            if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); if(themeToggle) themeToggle.checked = true; }
+            if (localStorage.getItem('sound') === 'on') { if(soundToggle) soundToggle.checked = true; }
+        };
+
+        // --- NAVIGATION HANDLERS ---
+        function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('active'); }
+        
+        function closeAll() {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            document.getElementById('modal-signin').classList.remove('active');
+            document.getElementById('modal-settings').classList.remove('active');
+        }
+
+        function handleNav(action) {
+            if (action === 'settings') {
+                closeAll();
+                setTimeout(() => { document.getElementById('modal-settings').classList.add('active'); overlay.classList.add('active'); }, 300);
+            }
+            else if (action === 'signin') {
+                closeAll();
+                setTimeout(() => { document.getElementById('modal-signin').classList.add('active'); overlay.classList.add('active'); }, 300);
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast'); toast.innerText = msg; toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // --- SETTINGS LOGIC ---
+        function toggleTheme() {
+            if (themeToggle.checked) { document.body.classList.add('light-mode'); localStorage.setItem('theme', 'light'); }
+            else { document.body.classList.remove('light-mode'); localStorage.setItem('theme', 'dark'); }
+        }
+        function saveSoundPref() { localStorage.setItem('sound', soundToggle.checked ? 'on' : 'off'); }
+
+        // --- CALCULATOR LOGIC ---
         const eqDisplay = document.getElementById('eq-display');
         const resDisplay = document.getElementById('res-display');
         const stepsDisplay = document.getElementById('steps-display');
-
         const inpBase = document.getElementById('inp-base');
         const inpExp = document.getElementById('inp-exp');
         const inpRes = document.getElementById('inp-res');
-
-        function openSidebar() { sidebar.classList.add('open'); overlay.classList.add('active'); }
-        function closeSidebar() { sidebar.classList.remove('open'); overlay.classList.remove('active'); }
 
         function useE() {
             inpBase.value = Math.E;
@@ -288,31 +394,16 @@
             stepsDisplay.innerText = "Calculations for extreme numbers will use scientific notation.";
         }
 
-        // --- THE CORE LOGIC FOR BIG NUMBERS ---
         function formatBigNumber(base, exp) {
-            // If the number is small enough for JS to handle (approx 10^308)
             let simpleCalc = Math.pow(base, exp);
             if (isFinite(simpleCalc)) {
-                return {
-                    val: simpleCalc.toLocaleString('en-US', { maximumFractionDigits: 8 }),
-                    raw: simpleCalc,
-                    isBig: false
-                };
+                return { val: simpleCalc.toLocaleString('en-US', { maximumFractionDigits: 8 }), raw: simpleCalc, isBig: false };
             }
-
-            // If Infinity, use Logarithms to solve: result = 10^(log10(base) * exp)
             let logVal = Math.log10(Math.abs(base)) * exp;
             let exponentPart = Math.floor(logVal);
             let mantissaPart = Math.pow(10, logVal - exponentPart);
-
-            // Construct Scientific Notation string: 1.234e+500
             let sign = (base < 0 && exp % 2 !== 0) ? "-" : "";
-            return {
-                val: `${sign}${mantissaPart.toFixed(4)} × 10^${exponentPart}`,
-                raw: "Infinity",
-                isBig: true,
-                exponent: exponentPart
-            };
+            return { val: `${sign}${mantissaPart.toFixed(4)} × 10^${exponentPart}`, raw: "Infinity", isBig: true, exponent: exponentPart };
         }
 
         function calculate() {
@@ -320,47 +411,29 @@
             const e = parseFloat(inpExp.value);
             const r = parseFloat(inpRes.value);
             
-            // CASE 1: CALCULATE RESULT (Base^Exp)
             if (!isNaN(b) && !isNaN(e) && inpRes.value === "") {
                 const resultObj = formatBigNumber(b, e);
-                
                 eqDisplay.innerHTML = `${b} <sup>${e}</sup> =`;
-                
-                // Display logic
                 if (resultObj.isBig) {
-                    resDisplay.style.fontSize = "24px"; // Smaller font for long scientific notation
+                    resDisplay.style.fontSize = "24px";
                     resDisplay.innerText = resultObj.val;
                     stepsDisplay.innerText = `⚠️ LARGE NUMBER DETECTED\nStandard calculators show 'Infinity'.\nUsing Logarithmic Logic:\nLog10 = ${e} × log(${b}) ≈ ${e} × ${Math.log10(b).toFixed(4)}\nTotal Order of Magnitude ≈ 10^${resultObj.exponent}`;
                 } else {
                     resDisplay.style.fontSize = "32px";
                     resDisplay.innerText = resultObj.val;
-                    inpRes.value = resultObj.raw; // Fill the field if it fits
-                    
-                    // Simple Steps
-                    if (Number.isInteger(e) && e > 0 && e <= 10) {
-                         stepsDisplay.innerText = `Expansion: ${Array(e).fill(b).join(" × ")} = ${resultObj.val}`;
-                    } else {
-                         stepsDisplay.innerText = `Standard Calculation: ${b} raised to the power of ${e}.`;
-                    }
+                    inpRes.value = resultObj.raw;
+                    if (Number.isInteger(e) && e > 0 && e <= 10) { stepsDisplay.innerText = `Expansion: ${Array(e).fill(b).join(" × ")} = ${resultObj.val}`; } 
+                    else { stepsDisplay.innerText = `Standard Calculation: ${b} raised to the power of ${e}.`; }
                 }
             }
-
-            // CASE 2: CALCULATE EXPONENT (Logarithm)
             else if (!isNaN(b) && !isNaN(r) && inpExp.value === "") {
-                // Note: Can't easily reverse engineer a massive scientific notation string input here without a parser, 
-                // so this works for standard numbers.
-                if (b <= 0 || (b === 1 && r !== 1)) {
-                    resDisplay.innerText = "Error";
-                    return;
-                }
+                if (b <= 0 || (b === 1 && r !== 1)) { resDisplay.innerText = "Error"; return; }
                 let resVal = Math.log(r) / Math.log(b);
                 eqDisplay.innerHTML = `Log<sub>${b}</sub>(${r}) =`;
                 resDisplay.innerText = resVal.toFixed(6);
                 inpExp.value = resVal;
                 stepsDisplay.innerText = `Solving for Exponent:\nn = log(${r}) / log(${b})`;
             }
-
-            // CASE 3: CALCULATE BASE (Root)
             else if (!isNaN(e) && !isNaN(r) && inpBase.value === "") {
                 let resVal = Math.pow(r, 1/e);
                 eqDisplay.innerHTML = `<sup>${e}</sup>√${r} =`;
@@ -368,7 +441,6 @@
                 inpBase.value = resVal;
                 stepsDisplay.innerText = `Solving for Base:\nx = ${r}^(1/${e})`;
             }
-
             else {
                 resDisplay.innerText = "Input Error";
                 stepsDisplay.innerText = "Please fill exactly TWO fields and leave one empty to solve.";

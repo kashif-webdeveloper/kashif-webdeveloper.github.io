@@ -85,10 +85,38 @@
         /* SIDEBAR & OVERLAY */
         .overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 4000; opacity: 0; pointer-events: none; transition: 0.3s; backdrop-filter: blur(2px); }
         .overlay.active { opacity: 1; pointer-events: all; }
-        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--sidebar-bg); z-index: 5000; transition: transform 0.3s ease; box-shadow: 5px 0 20px var(--shadow); padding: 20px; display: flex; flex-direction: column; }
+        
+        .sidebar { position: fixed; top: 0; left: -300px; width: 280px; height: 100%; background: var(--sidebar-bg); z-index: 5000; transition: transform 0.3s ease; box-shadow: 5px 0 20px var(--shadow); padding: 20px; display: flex; flex-direction: column; overflow-y: auto; }
         .sidebar.open { transform: translateX(300px); }
+        
+        .profile { text-align: center; border-bottom: 1px solid var(--screen); padding-bottom: 20px; margin-bottom: 20px; }
+        .avatar { width: 80px; height: 80px; background: linear-gradient(45deg, var(--accent), #3b82f6); border-radius: 50%; margin: 40px auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; color: white; }
+        
         .menu-item { padding: 15px; color: var(--text-muted); border-radius: 8px; margin-bottom: 5px; cursor: pointer; display: flex; align-items: center; gap: 10px; transition: 0.2s; text-decoration: none; }
-        .menu-item:hover { background: var(--screen); color: var(--accent); }
+        .menu-item:hover, .menu-item:active { background: var(--screen); color: var(--accent); }
+
+        /* MODALS (Settings & Sign In) */
+        .modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.9); width: 85%; max-width: 320px; background: var(--modal-bg); border: 1px solid var(--screen); border-radius: 16px; padding: 20px; z-index: 6000; opacity: 0; pointer-events: none; transition: 0.2s, background 0.3s; box-shadow: 0 20px 50px rgba(0,0,0,0.6); max-height: 90vh; overflow-y: auto; }
+        .modal.active { opacity: 1; pointer-events: all; transform: translate(-50%, -50%) scale(1); }
+        .modal h3 { margin-bottom: 15px; color: var(--accent); text-align: center; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 5px; }
+        .input-group input { width: 100%; padding: 10px; background: var(--screen); border: 1px solid var(--text-muted); color: var(--text); border-radius: 6px; }
+        .modal-btn { width: 100%; background: var(--accent); color: white; font-weight: bold; padding: 12px; border-radius: 6px; margin-top: 10px; display: block; text-align: center; text-decoration: none; border: none; cursor: pointer; }
+        .close-modal { position: absolute; top: 10px; right: 15px; color: var(--text-muted); font-size: 24px; cursor: pointer; }
+
+        /* SWITCHES */
+        .switch-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 10px; }
+        .switch-label { color: var(--text); font-weight: 500; }
+        .switch { position: relative; display: inline-block; width: 50px; height: 26px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--screen); transition: .4s; border-radius: 34px; }
+        .slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: var(--accent); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 10px 20px; border-radius: 30px; font-size: 14px; opacity: 0; transition: 0.3s; z-index: 7000; pointer-events: none; }
+        .toast.show { opacity: 1; bottom: 50px; }
 
         /* SEO SECTION */
         .seo-section { width: 100%; max-width: 800px; padding: 30px; background: var(--calc-body); border-radius: 12px; border: 1px solid var(--screen); color: var(--text); margin-bottom: 20px; margin-top: 20px; }
@@ -100,30 +128,74 @@
         .equation { background: var(--bg-dark); padding: 10px; border-radius: 5px; text-align: center; font-family: 'Courier New', monospace; margin: 15px 0; color: var(--accent); border: 1px dashed var(--text-muted); }
 
         .footer-credit { margin-top: auto; text-align: center; font-size: 0.8rem; color: var(--text-muted); padding: 20px 0; border-top: 1px solid var(--screen); width: 100%; }
-        .footer-credit a { color: var(--accent); text-decoration: none; margin: 0 5px; }
+        .footer-credit span { color: var(--accent); font-weight: 700; }
+        .footer-credit a { color: var(--accent); text-decoration: none; margin: 0 5px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
+    <div class="overlay" id="overlay" onclick="closeAll()"></div>
+    <div class="toast" id="toast">Action Successful</div>
 
     <div class="sidebar" id="sidebar">
-        <div style="position:absolute; top:15px; right:15px; font-size:24px; padding:10px; color:var(--text-muted); cursor:pointer;" onclick="closeSidebar()">&times;</div>
-        <div style="text-align: center; border-bottom: 1px solid var(--screen); padding-bottom: 20px; margin-bottom: 20px;">
-            <div style="width: 80px; height: 80px; background: linear-gradient(45deg, var(--accent), #3b82f6); border-radius: 50%; margin: 40px auto 15px; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: bold; color: white;">K</div>
+        <div style="position:absolute; top:15px; right:15px; font-size:24px; padding:10px; color:var(--text-muted); cursor:pointer;" onclick="closeAll()">&times;</div>
+        
+        <div class="profile">
+            <div class="avatar">K</div>
             <h2 style="color:var(--text);">Kashif</h2>
             <p style="color: var(--accent); font-weight:bold; margin-bottom: 8px; font-size: 0.9rem;">Elite Full-Stack Architect</p>
+            <p style="color: var(--text-muted); font-size: 0.8rem;">Innovative developer creating seamless solutions.</p>
         </div>
-        <a href="index.html" class="menu-item"><span>&#8962;</span> Home (Scientific)</a>
-        <a href="fraction.html" class="menu-item"><span>½</span> Fraction Calc</a>
-        <a href="percentage.html" class="menu-item" style="background: var(--screen); color: var(--accent);"><span>%</span> Percentage Calc</a>
-        <div class="menu-item" onclick="toggleTheme()"><span>&#9728;</span> Toggle Theme</div>
-        <a href="contact.html" class="menu-item"><span>&#128100;</span> Contact</a>
+        
+        <a href="index.html" class="menu-item" onclick="closeAll()"><span>&#8962;</span> Home</a>
+        <a href="index.html" class="menu-item" onclick="closeAll()"><span>&#8730;</span> Scientific Mode</a>
+        
+        <a href="standard-deviation.html" class="menu-item" onclick="closeAll()"><span>&#963;</span> Standard Deviation</a>
+        
+        <a href="log-calculator.html" class="menu-item" onclick="closeAll()"><span>log</span> Log Calculator</a>
+        
+        <a href="exponent.html" class="menu-item" onclick="closeAll()"><span>^</span> Exponent Calculator</a>
+        
+        <a href="fraction.html" class="menu-item" onclick="closeAll()"><span>½</span> Fraction Calculator</a>
+        
+        <div class="menu-item" style="background: var(--screen); color: var(--accent);" onclick="closeAll()"><span>%</span> Percentage Calculator</div>
+        
+        <a href="bmi-calculator.html" class="menu-item" onclick="closeAll()"><span>&#9878;</span> BMI Calculator</a>
+        
+        <a href="mortgage-calculator.html" class="menu-item" onclick="closeAll()"><span>&#127969;</span> Mortgage Calculator</a>
+        
+        <div class="menu-item" onclick="handleNav('settings')"><span>&#9881;</span> Settings</div>
+        
+        <a href="contact.html" class="menu-item" onclick="closeAll()"><span>&#128100;</span> Contact Developer</a>
+        
+        <div class="menu-item" onclick="handleNav('signin')" style="margin-top:auto; background:var(--accent); color:white; justify-content: center; font-weight:bold;">Sign In</div>
+    </div>
+
+    <div class="modal" id="modal-signin">
+        <span class="close-modal" onclick="closeAll()">&times;</span>
+        <h3>Sign In</h3>
+        <div class="input-group"><label>Email</label><input type="email" placeholder="Enter email"></div>
+        <div class="input-group"><label>Password</label><input type="password" placeholder="Enter password"></div>
+        <button class="modal-btn" onclick="showToast('Welcome back, Kashif!'); closeAll()">Login</button>
+    </div>
+
+    <div class="modal" id="modal-settings">
+        <span class="close-modal" onclick="closeAll()">&times;</span>
+        <h3>Settings</h3>
+        <div class="switch-container">
+            <span class="switch-label">Light Mode</span>
+            <label class="switch"><input type="checkbox" id="theme-toggle" onchange="toggleTheme()"><span class="slider"></span></label>
+        </div>
+        <div class="switch-container">
+            <span class="switch-label">Button Sounds</span>
+            <label class="switch"><input type="checkbox" id="sound-toggle" onchange="saveSoundPref()"><span class="slider"></span></label>
+        </div>
+        <button class="modal-btn" onclick="showToast('Preferences Saved'); closeAll()">Done</button>
     </div>
 
     <header>
         <div class="hamburger" onclick="openSidebar()">&#9776;</div>
-        <a href="index.html" class="brand">CALCULATOR<span>.NET</span></a>
+        <div class="brand">KASHIF <span>PRO</span></div>
         <div style="width: 24px;"></div>
     </header>
 
@@ -217,21 +289,54 @@
         </div>
 
         <div class="footer-credit">
-            Architected & Engineered by <span>Kashif Dawar</span> | <a href="index.html">Home</a> | <a href="contact.html">Contact Us</a> | <a href="privacy.html">Privacy</a>
+            Architected & Engineered by <span>Kashif Dawar</span> | <a href="index.html">Home</a> | <a href="contact.html">Contact Us</a> | <a href="privacy.html">Privacy Policy</a> | <a href="terms.html">Terms of Use</a>
         </div>
     </div>
 
     <script>
-        // --- THEME & UI LOGIC ---
-        if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
+        // --- CONFIG & STATE ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const soundToggle = document.getElementById('sound-toggle');
         
-        function toggleTheme() {
-            document.body.classList.toggle('light-mode');
-            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        window.onload = function() {
+            if (localStorage.getItem('theme') === 'light') { document.body.classList.add('light-mode'); if(themeToggle) themeToggle.checked = true; }
+            if (localStorage.getItem('sound') === 'on') { if(soundToggle) soundToggle.checked = true; }
+            updatePhraseUI();
+        };
+
+        // --- NAVIGATION HANDLERS ---
+        function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('overlay').classList.add('active'); }
+        
+        function closeAll() {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('active');
+            document.getElementById('modal-signin').classList.remove('active');
+            document.getElementById('modal-settings').classList.remove('active');
         }
 
-        function openSidebar() { document.getElementById('sidebar').classList.add('open'); document.getElementById('overlay').classList.add('active'); }
-        function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('overlay').classList.remove('active'); }
+        function handleNav(action) {
+            if (action === 'settings') {
+                closeAll();
+                setTimeout(() => { document.getElementById('modal-settings').classList.add('active'); document.getElementById('overlay').classList.add('active'); }, 300);
+            }
+            else if (action === 'signin') {
+                closeAll();
+                setTimeout(() => { document.getElementById('modal-signin').classList.add('active'); document.getElementById('overlay').classList.add('active'); }, 300);
+            }
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast'); toast.innerText = msg; toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // --- SETTINGS LOGIC ---
+        function toggleTheme() {
+            if (themeToggle.checked) { document.body.classList.add('light-mode'); localStorage.setItem('theme', 'light'); }
+            else { document.body.classList.remove('light-mode'); localStorage.setItem('theme', 'dark'); }
+        }
+        function saveSoundPref() { localStorage.setItem('sound', soundToggle.checked ? 'on' : 'off'); }
+
 
         // --- CALCULATOR 1: PHRASES ---
         function updatePhraseUI() {
@@ -265,22 +370,19 @@
             const b = parseFloat(document.getElementById('p1_b').value);
             const resBox = document.getElementById('res-phrase');
 
-            if (isNaN(a) || isNaN(b)) { alert("Please enter valid numbers"); return; }
+            if (isNaN(a) || isNaN(b)) { showToast("Please enter valid numbers"); return; }
 
             let result, text;
 
             if (type === '1') {
-                // What is A% of B?
                 result = (a / 100) * b;
                 text = `${a}% of ${b} is ${parseFloat(result.toFixed(4))}`;
             } else if (type === '2') {
-                // A is what % of B?
-                if (b === 0) { alert("Cannot divide by zero"); return; }
+                if (b === 0) { showToast("Cannot divide by zero"); return; }
                 result = (a / b) * 100;
                 text = `${a} is ${parseFloat(result.toFixed(4))}% of ${b}`;
             } else if (type === '3') {
-                // A is B% of what?
-                if (b === 0) { alert("Percentage cannot be zero for this calculation"); return; }
+                if (b === 0) { showToast("Percentage cannot be zero"); return; }
                 result = a / (b / 100);
                 text = `${a} is ${b}% of ${parseFloat(result.toFixed(4))}`;
             }
@@ -295,10 +397,10 @@
             const v2 = parseFloat(document.getElementById('diff-v2').value);
             const resBox = document.getElementById('res-diff');
 
-            if (isNaN(v1) || isNaN(v2)) return;
+            if (isNaN(v1) || isNaN(v2)) { showToast("Enter both values"); return; }
 
             const avg = (v1 + v2) / 2;
-            if (avg === 0) { alert("Average is zero, cannot calculate difference"); return; }
+            if (avg === 0) { showToast("Average is zero"); return; }
             
             const diff = Math.abs(v1 - v2);
             const percentage = (diff / avg) * 100;
@@ -316,8 +418,8 @@
             const v2 = parseFloat(document.getElementById('change-v2').value);
             const resBox = document.getElementById('res-change');
 
-            if (isNaN(v1) || isNaN(v2)) return;
-            if (v1 === 0) { alert("Original value cannot be zero"); return; }
+            if (isNaN(v1) || isNaN(v2)) { showToast("Enter both values"); return; }
+            if (v1 === 0) { showToast("Original value cannot be zero"); return; }
 
             const change = v2 - v1;
             const percentage = (change / v1) * 100;
@@ -330,9 +432,6 @@
             `;
             resBox.style.display = 'block';
         }
-
-        // Initialize
-        updatePhraseUI();
     </script>
 </body>
 </html>
