@@ -1,21 +1,23 @@
 {
-  "name": "Kashif's Pro Calculator",
+  "name": "Kashif Pro",
   "short_name": "Pro Calc",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#0f172a",
+  "background_color": "#1e293b",
   "theme_color": "#1e293b",
   "orientation": "portrait",
   "icons": [
     {
       "src": "icon.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "192x192",
+      "purpose": "any maskable"
     },
     {
       "src": "icon.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "512x512",
+      "purpose": "any maskable"
     }
   ]
 }
