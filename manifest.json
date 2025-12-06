@@ -1,7 +1,7 @@
 {
   "name": "Kashif's Pro Calculator",
-  "short_name": "Pro Calc",
-  "description": "A high-performance scientific, financial, and health calculator suite.",
+  "short_name": "Kashif Pro",
+  "description": "Scientific Calculator with Integration, Derivation, and Finance tools. Works offline.",
   "start_url": "./index.html",
   "id": "/index.html",
   "scope": "./",
@@ -12,7 +12,8 @@
   "categories": [
     "productivity",
     "utilities",
-    "education"
+    "education",
+    "finance"
   ],
   "icons": [
     {
@@ -38,6 +39,22 @@
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Scientific Mode",
+      "short_name": "Scientific",
+      "description": "Open Scientific Calculator directly",
+      "url": "./index.html?mode=sci",
+      "icons": [{ "src": "icon.png", "sizes": "192x192", "type": "image/png" }]
+    },
+    {
+      "name": "Mortgage Calc",
+      "short_name": "Mortgage",
+      "description": "Calculate Home Loan",
+      "url": "./mortgage-calculator.html",
+      "icons": [{ "src": "icon.png", "sizes": "192x192", "type": "image/png" }]
     }
   ]
 }
