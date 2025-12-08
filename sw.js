@@ -1,5 +1,5 @@
-// UPDATED: Version v23 (Icon Fix Update)
-const CACHE_NAME = 'kashif-pro-v23';
+// UPDATED: Version v24 (Manifest Refresh Update)
+const CACHE_NAME = 'kashif-pro-v24';
 
 const ASSETS = [
   './',

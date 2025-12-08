@@ -41,6 +41,20 @@
       "purpose": "maskable"
     }
   ],
+  "screenshots": [
+    {
+      "src": "screen-sci.png",
+      "sizes": "720x1447",
+      "type": "image/png",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "screen-bmi.png",
+      "sizes": "720x1460",
+      "type": "image/png",
+      "form_factor": "narrow"
+    }
+  ],
   "shortcuts": [
     {
       "name": "Scientific Mode",
