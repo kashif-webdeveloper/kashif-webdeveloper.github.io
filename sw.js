@@ -1,5 +1,5 @@
-// UPDATED: Version v22 (Ultimate Quantum Engine v15.0)
-const CACHE_NAME = 'kashif-pro-v22';
+// UPDATED: Version v23 (Icon Fix Update)
+const CACHE_NAME = 'kashif-pro-v23';
 
 const ASSETS = [
   './',
@@ -17,7 +17,8 @@ const ASSETS = [
   './standard-deviation.html',
   './terms.html',
   './manifest.json',
-  './icon.png'
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', (e) => {
